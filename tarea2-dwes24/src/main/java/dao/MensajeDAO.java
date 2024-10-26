@@ -1,5 +1,5 @@
 package dao;
 
-public class MensajeDAO {
+public class  MensajeDAO {
 
 }

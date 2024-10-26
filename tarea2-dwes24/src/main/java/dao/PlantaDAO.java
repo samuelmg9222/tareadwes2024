@@ -72,8 +72,8 @@ public class PlantaDAO {
 
 	                Planta planta = new Planta(codigo, nombreComun, nombreCientifico);
 	                plantas.add(planta);
-	                for(Planta p:plantas) {
-	                	System.out.println(p);
+	                for(Planta pl:plantas) {
+	                	System.out.println(pl); 
 	                }
 	            }
 	        } catch (SQLException e) {

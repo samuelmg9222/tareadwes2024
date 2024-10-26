@@ -1,7 +1,7 @@
 package modelo;
 
 import java.util.Objects;
-
+ 
 public class Planta {
 private String codigo;
 private String nombrecomun;

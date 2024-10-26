@@ -1,5 +1,5 @@
 package principal;
-import com.mysql.cj.jdbc.MysqlDataSource;
+import com.mysql.cj.jdbc.MysqlDataSource; 
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.Connection;
@@ -11,7 +11,7 @@ public class ConexionBD {
 
     
     public ConexionBD() {
-        try {
+        try { 
             Properties prop = new Properties();
             FileInputStream fis = new FileInputStream("src/main/resources/db.properties");
             prop.load(fis);

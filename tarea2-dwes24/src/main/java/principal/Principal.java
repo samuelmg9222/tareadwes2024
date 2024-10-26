@@ -16,8 +16,8 @@ public class Principal {
         	
  PlantaDAO plantaDao = new PlantaDAO();
         
-        
-        plantaDao.insertarPlanta();
+ 
+
         	plantaDao.verplantas();
         	
        
