@@ -19,12 +19,23 @@ import modelo.Planta;
 import principal.ConexionBD;
 
 public class PlantaDAO {
-	 private ConexionBD conexionBD;
-	   public PlantaDAO() {
-	        this.conexionBD = new ConexionBD();
+	private Connection con;
+	private PreparedStatement ps;
+	private ResultSet rs;
+	 
+	    public PlantaDAO(Connection c) {
+	        this.con = c;
 	    }
 
 	   public void insertarPlanta() {
+		   
+		   try {
+			if( this.con ==null ||this.con.isClosed()) 
+				   this.con=ConexionBD.getInstance().getConnection();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	        Scanner in = new Scanner(System.in);
 
 	       
@@ -41,29 +52,38 @@ public class PlantaDAO {
 	        Planta nueva = new Planta(codigo, nombreComun, nombreCientifico);
 
 	      
-	        try (Connection con = conexionBD.getConnection();
-	             PreparedStatement ps = con.prepareStatement("INSERT INTO plantas(codigo, nombrecomun, nombrecientifico) VALUES(?, ?, ?)")) {
+	        try {
+	            ps = con.prepareStatement("INSERT INTO plantas(codigo, nombrecomun, nombrecientifico) VALUES(?, ?, ?)");
 	            
 	            ps.setString(1, nueva.getCodigo());
 	            ps.setString(2, nueva.getNombrecomun());
 	            ps.setString(3, nueva.getNombrecientifico());
 
 	            ps.executeUpdate();
+	            ps.close();
+	            ConexionBD.cerrarConexion();
 	            System.out.println("Planta insertada correctamente");
 	        } catch (SQLException e) {
-	            System.out.println("Se ha producido una SQLException: " + e.getMessage());
+	            System.out.println("Se ha producido una SQLException: " + e.getMessage());  e.printStackTrace();
 	        }
 
 	        
-	        in.close();
+	        
 	    }
 	   public void verplantas() {
+		   try {
+				if( this.con ==null ||this.con.isClosed()) 
+					   this.con=ConexionBD.getInstance().getConnection();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 	        List<Planta> plantas = new ArrayList<>();
 	        String sql = "SELECT * FROM PLANTAS";
 
-	        try (Connection con = conexionBD.getConnection();
-	             PreparedStatement ps = con.prepareStatement(sql);
-	             ResultSet rs = ps.executeQuery()) {
+	        try {
+	             ps = con.prepareStatement(sql);
+	             rs = ps.executeQuery();
 
 	            while (rs.next()) {
 	                String codigo = rs.getString("codigo");
@@ -72,15 +92,31 @@ public class PlantaDAO {
 
 	                Planta planta = new Planta(codigo, nombreComun, nombreCientifico);
 	                plantas.add(planta);
-	                for(Planta pl:plantas) {
+	               
+	            } 
+	            for(Planta pl:plantas) {
 	                	System.out.println(pl); 
 	                }
-	            }
+	            ConexionBD.cerrarConexion();
+	            ps.close();
+	            rs.close();
 	        } catch (SQLException e) {
-	            System.err.println("Error al consultar plantas: " + e.getMessage());
+	            System.err.println("Error: " + e.getMessage());
+	            e.printStackTrace();
 	        }
 	    
 	   }
-	   
+	   /*
+	   int insertar(Planta p);
+		
+			int modificar(Planta p);
+		
+			int eliminar(Planta p);
+			
+			Planta findById(int id);
+			ArrayList<Planta> findByNombre(String nombre);
+			List<Planta> findAll();
+		}
+		*/
 }
 	
