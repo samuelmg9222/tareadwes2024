@@ -34,7 +34,7 @@ public class PlantaDAO {
 		   String nombreCientifico;
 		   Utils utils = new Utils(con);
 		   try {
-			if( this.con ==null ||this.con.isClosed()) 
+ 			if( this.con == null ||this.con.isClosed()) 
 				   this.con=ConexionBD.getInstance().getConnection();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -49,7 +49,7 @@ public class PlantaDAO {
 	        	 System.out.println("Ese codigo ya existe, no es posible");
 	         }
 	         else if(!codigo.matches("\\d{4}")){
-	        	 System.out.println("Formato no valido");
+	        	 System.out.println("Formato no valid");
 	         }
 	       } while(!codigo.matches("\\d{4}")||utils.existeCodigoPlanta(codigo) );
 	       
