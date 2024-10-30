@@ -9,9 +9,6 @@ import java.util.Properties;
 
 import com.mysql.cj.jdbc.MysqlDataSource;
 
-import DAOImp.CredencialesDAOImpl;
-import DAOImp.MensajeDAOImpl;
-import DAOImp.PersonaDAOImpl;
 
 import dao.*;
 

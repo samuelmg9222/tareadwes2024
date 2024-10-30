@@ -45,7 +45,7 @@ public void setNombrecientifico(String nombrecientifico) {
 
 @Override
 public String toString() {
-	return "Planta [codigo=" + codigo + ", nombrecomun=" + nombrecomun + ", nombrecientifico=" + nombrecientifico + "]";
+    return  String.format("%-10s %-20s %-30s", codigo, nombrecomun, nombrecientifico);
 }
 
 

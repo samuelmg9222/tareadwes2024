@@ -6,10 +6,7 @@ public class Ejemplar {
     private String nombre;
 
     
-    public Ejemplar() {
-    	super();
-    }
-
+    
     
     public Ejemplar(Long id, String nombre) {
     	super();

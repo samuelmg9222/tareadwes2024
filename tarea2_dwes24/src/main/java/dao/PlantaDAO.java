@@ -17,18 +17,22 @@ import com.mysql.cj.xdevapi.Statement;
 
 import modelo.Planta;
 import principal.ConexionBD;
+import utilidades.Utils;
 
 public class PlantaDAO {
 	private Connection con;
 	private PreparedStatement ps;
 	private ResultSet rs;
-	 
+	
 	    public PlantaDAO(Connection c) {
 	        this.con = c;
 	    }
 
 	   public void insertarPlanta() {
-		   
+		   String nombreComun;
+		   String codigo;
+		   String nombreCientifico;
+		   Utils utils = new Utils(con);
 		   try {
 			if( this.con ==null ||this.con.isClosed()) 
 				   this.con=ConexionBD.getInstance().getConnection();
@@ -38,15 +42,45 @@ public class PlantaDAO {
 		}
 	        Scanner in = new Scanner(System.in);
 
+	       do {
+	        System.out.println("Dame codigo de una nueva planta (FORMATO DE 4 NUMEROS [0000])");
+	         codigo = in.nextLine().trim();
+	         if(utils.existeCodigoPlanta(codigo)) {
+	        	 System.out.println("Ese codigo ya existe, no es posible");
+	         }
+	         else if(!codigo.matches("\\d{4}")){
+	        	 System.out.println("Formato no valido");
+	         }
+	       } while(!codigo.matches("\\d{4}")||utils.existeCodigoPlanta(codigo) );
 	       
-	        System.out.println("Dame codigo de una nueva planta");
-	        String codigo = in.nextLine().trim().toUpperCase();
-	        
+	       
+	       
+	       
+	       
+	       
+	       
+	       
+	       
+	       
+	       
+	       
+	       
+	       
+	        do {
 	        System.out.println("Dame nombre comun de una planta");
-	        String nombreComun = in.nextLine();
-	        
-	        System.out.println("Dame nombre cientifico de una planta");
-	        String nombreCientifico = in.nextLine();
+	         nombreComun = in.nextLine().trim().toUpperCase();
+	         if(!nombreComun.matches("[a-zA-Z]{3,100}")) {
+	        	 System.out.println("Dato invalido. Solo se aceptan letras y nombres de entre 3 y 100 caracteres");
+	         }
+	        }while(!nombreComun.matches("[a-zA-Z]{3,100}"));
+	        	
+	        do {
+		        System.out.println("Dame nombre cientifico de una planta");
+		        nombreCientifico = in.nextLine().trim().toUpperCase();
+		         if(!nombreCientifico.matches("[a-zA-Z]{3,100}")) {
+		        	 System.out.println("Dato invalido. Solo se aceptan letras y nombres de entre 3 y 100 caracteres");
+		         }
+		        }while(!nombreCientifico.matches("[a-zA-Z]{3,100}"));
 
 	        
 	        Planta nueva = new Planta(codigo, nombreComun, nombreCientifico);
@@ -79,7 +113,7 @@ public class PlantaDAO {
 				e.printStackTrace();
 			}
 	        List<Planta> plantas = new ArrayList<>();
-	        String sql = "SELECT * FROM PLANTAS";
+	        String sql = "SELECT * FROM PLANTAS ORDER BY nombreComun ASC";
 
 	        try {
 	             ps = con.prepareStatement(sql);
@@ -94,6 +128,7 @@ public class PlantaDAO {
 	                plantas.add(planta);
 	               
 	            } 
+	            System.out.println(Utils.obtenerEncabezado());
 	            for(Planta pl:plantas) {
 	                	System.out.println(pl); 
 	                }
