@@ -25,7 +25,7 @@ public class  MensajeDAO {
     	try {
 			if (this.con == null || this.con.isClosed())
 				this.con = ConexionBD.getInstance().getConnection();
-          
+           
             String sqlIns2 = "INSERT INTO mensajes(id, fechahora, mensaje, idejemplar, idpersona) VALUES(?, ?, ?, ?, ?)";
             PreparedStatement ps2 = con.prepareStatement(sqlIns2);
             ps2.setLong(1, idMensaje);
