@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 
 import principal.ConexionBD;
 
@@ -31,7 +32,32 @@ public class Utils {
 	    try (PreparedStatement ps = con.prepareStatement(sql);
 	         ResultSet rs = ps.executeQuery()) {
 	        
-	        // Si hay un resultado, obtenemos el nuevo ID
+	       
+	        if (rs.next()) {
+	            id = rs.getLong("nuevo_id");
+	        }
+	    } catch (SQLException e) {
+	        System.err.println("Error al generar un nuevo ID: " + e.getMessage());
+	        e.printStackTrace();
+	  
+	    }
+	    return id;
+	}
+	public long generarIdMensaje() {
+		 try {
+				if( this.con ==null ||this.con.isClosed()) 
+					   this.con=ConexionBD.getInstance().getConnection();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	    long id = 0;
+	    String sql = "SELECT COALESCE(MAX(id), 0) + 1 AS nuevo_id FROM mensajes";
+	    
+	    try (PreparedStatement ps = con.prepareStatement(sql);
+	         ResultSet rs = ps.executeQuery()) {
+	        
+	        
 	        if (rs.next()) {
 	            id = rs.getLong("nuevo_id");
 	        }
@@ -92,11 +118,13 @@ public  boolean existeCodigoPlanta(String codigo) {
     	 ps = con.prepareStatement(consulta);
         ps.setString(1, codigo);
 
-        try (ResultSet rs = ps.executeQuery()) {
+        rs = ps.executeQuery();
             if (rs.next() && rs.getInt(1) > 0) {
                 existe = true;
+                ps.close();
+	            ConexionBD.cerrarConexion();
             }
-        }
+        
 
     } catch (SQLException e) {
         System.err.println("Error al consultar si el código ya existe: " + e.getMessage());
@@ -105,7 +133,18 @@ public  boolean existeCodigoPlanta(String codigo) {
     return existe;
 }
 
-
-
+public String generarmensaje() {
+	 LocalDateTime fechaHora = LocalDateTime.now();
+	String mensaje="El usuario ha registrado un nuevo ejemplar en este momento: "+fechaHora;
+	
+	
+	
+	return mensaje;
+	
+}
 
 }
+
+
+
+

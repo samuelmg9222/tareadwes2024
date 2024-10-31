@@ -1,9 +1,11 @@
 package dao;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -26,52 +28,36 @@ public class EjemplarDAO {
 		this.con = c;
 	}
 
-	public void nuevoEjemplar() {
+	public void nuevoEjemplar(Long a,String b,String c) {
 
-		String codigoplanta;
-		String nombre;
-		Scanner in = new Scanner(System.in);
-		boolean existe = false;
-		Utils utils = new Utils(con);
-	      do {
-	            System.out.println("Dame código de una planta:");
-	            codigoplanta = in.next().trim();
-	            existe = utils.existeCodigoPlanta(codigoplanta);
 
-	            if (!existe) {
-	                System.out.println("El código no existe. Por favor, ingrese un código valido.");
-	            } 
-	        } while (!existe);
-	    
-	
-		
-		long id = utils.generarIdEjemplar();
-		String nombregenerado = utils.generarNombreEjemplar(codigoplanta);
-		nombre = id + "_" + nombregenerado;
-		Ejemplar nuevo = new Ejemplar(id, nombre);
 		String sqlIns = "INSERT INTO ejemplares(id, nombre, codigoplanta) VALUES(?, ?, ?)";
 		try {
 			if (this.con == null || this.con.isClosed())
 				this.con = ConexionBD.getInstance().getConnection();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		try (PreparedStatement ps = con.prepareStatement(sqlIns)) {
+		
+		
+		PreparedStatement ps = con.prepareStatement(sqlIns);
 
-			ps.setLong(1, nuevo.getId());
-			ps.setString(2, nuevo.getNombre());
-			ps.setString(3, codigoplanta);
-
+			ps.setLong(1, a);
+			ps.setString(2, b);
+			ps.setString(3, c);
+			
 			ps.executeUpdate();
 			ps.close();
-			ConexionBD.cerrarConexion();
-			System.out.println("Planta insertada correctamente");
+			
+					 System.out.println("Inserción en la tabla `ejemplares` completada con éxito.");
+				ConexionBD.cerrarConexion();
+			
 
 		} catch (SQLException e) {
 			System.out.println("Se ha producido una SQLException: " + e.getMessage());
 			e.printStackTrace();
 		}
+		
+			
+
+	
 
 	}
 

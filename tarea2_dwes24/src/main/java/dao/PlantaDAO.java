@@ -27,76 +27,24 @@ public class PlantaDAO {
 	    public PlantaDAO(Connection c) {
 	        this.con = c;
 	    }
+	    
+	   public void insertarPlanta(String a, String b, String c) {
+		   
 
-	   public void insertarPlanta() {
-		   String nombreComun;
-		   String codigo;
-		   String nombreCientifico;
-		   Utils utils = new Utils(con);
-		   try {
- 			if( this.con == null ||this.con.isClosed()) 
-				   this.con=ConexionBD.getInstance().getConnection();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	        Scanner in = new Scanner(System.in);
-
-	       do {
-	        System.out.println("Dame codigo de una nueva planta (FORMATO DE 4 NUMEROS [0000])");
-	         codigo = in.nextLine().trim();
-	         if(utils.existeCodigoPlanta(codigo)) {
-	        	 System.out.println("Ese codigo ya existe, no es posible");
-	         }
-	         else if(!codigo.matches("\\d{4}")){
-	        	 System.out.println("Formato no valid");
-	         }
-	       } while(!codigo.matches("\\d{4}")||utils.existeCodigoPlanta(codigo) );
-	       
-	       
-	       
-	       
-	       
-	       
-	       
-	       
-	       
-	       
-	       
-	       
-	       
-	       
-	        do {
-	        System.out.println("Dame nombre comun de una planta");
-	         nombreComun = in.nextLine().trim().toUpperCase();
-	         if(!nombreComun.matches("[a-zA-Z]{3,100}")) {
-	        	 System.out.println("Dato invalido. Solo se aceptan letras y nombres de entre 3 y 100 caracteres");
-	         }
-	        }while(!nombreComun.matches("[a-zA-Z]{3,100}"));
-	        	
-	        do {
-		        System.out.println("Dame nombre cientifico de una planta");
-		        nombreCientifico = in.nextLine().trim().toUpperCase();
-		         if(!nombreCientifico.matches("[a-zA-Z]{3,100}")) {
-		        	 System.out.println("Dato invalido. Solo se aceptan letras y nombres de entre 3 y 100 caracteres");
-		         }
-		        }while(!nombreCientifico.matches("[a-zA-Z]{3,100}"));
-
-	        
-	        Planta nueva = new Planta(codigo, nombreComun, nombreCientifico);
-
-	      
 	        try {
+	 			if( this.con == null ||this.con.isClosed()) 
+					   this.con=ConexionBD.getInstance().getConnection();
+			
 	            ps = con.prepareStatement("INSERT INTO plantas(codigo, nombrecomun, nombrecientifico) VALUES(?, ?, ?)");
 	            
-	            ps.setString(1, nueva.getCodigo());
-	            ps.setString(2, nueva.getNombrecomun());
-	            ps.setString(3, nueva.getNombrecientifico());
+	            ps.setString(1, a);
+	            ps.setString(2, b);
+	            ps.setString(3, c);
 
 	            ps.executeUpdate();
 	            ps.close();
 	            ConexionBD.cerrarConexion();
-	            System.out.println("Planta insertada correctamente");
+	            
 	        } catch (SQLException e) {
 	            System.out.println("Se ha producido una SQLException: " + e.getMessage());  e.printStackTrace();
 	        }
@@ -104,7 +52,8 @@ public class PlantaDAO {
 	        
 	        
 	    }
-	   public void verplantas() {
+	   public List<Planta> obtenerPlantas(){
+		   List<Planta> plantas = new ArrayList<>();
 		   try {
 				if( this.con ==null ||this.con.isClosed()) 
 					   this.con=ConexionBD.getInstance().getConnection();
@@ -112,7 +61,7 @@ public class PlantaDAO {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-	        List<Planta> plantas = new ArrayList<>();
+	        
 	        String sql = "SELECT * FROM PLANTAS ORDER BY nombreComun ASC";
 
 	        try {
@@ -128,10 +77,7 @@ public class PlantaDAO {
 	                plantas.add(planta);
 	               
 	            } 
-	            System.out.println(Utils.obtenerEncabezado());
-	            for(Planta pl:plantas) {
-	                	System.out.println(pl); 
-	                }
+	          
 	            ConexionBD.cerrarConexion();
 	            ps.close();
 	            rs.close();
@@ -139,7 +85,8 @@ public class PlantaDAO {
 	            System.err.println("Error: " + e.getMessage());
 	            e.printStackTrace();
 	        }
-	    
+	       
+	    return plantas;
 	   }
 	   /*
 	   int insertar(Planta p);
@@ -153,5 +100,9 @@ public class PlantaDAO {
 			List<Planta> findAll();
 		}
 		*/
+
+	
+
+	
 }
 	
