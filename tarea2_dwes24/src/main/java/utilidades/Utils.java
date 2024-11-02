@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import principal.ConexionBD;
 
@@ -132,10 +133,39 @@ public  boolean existeCodigoPlanta(String codigo) {
 
     return existe;
 }
+public  boolean existeCodigoEjemplar(String codigo) {
+	try {
+		if( this.con ==null ||this.con.isClosed()) 
+			   this.con=ConexionBD.getInstance().getConnection();
+	} catch (SQLException e) {
+		
+		e.printStackTrace();
+	}
+    String consulta = "SELECT COUNT(*) FROM ejemplares WHERE id = ?";
+    boolean existe = false;
 
+    try  {
+    	 ps = con.prepareStatement(consulta);
+        ps.setString(1, codigo);
+
+        rs = ps.executeQuery();
+            if (rs.next() && rs.getInt(1) > 0) {
+                existe = true;
+                ps.close();
+	            ConexionBD.cerrarConexion();
+            }
+        
+
+    } catch (SQLException e) {
+        System.err.println("Error al consultar si el código ya existe: " + e.getMessage());
+    }
+
+    return existe;
+}
 public String generarmensaje() {
 	 LocalDateTime fechaHora = LocalDateTime.now();
-	String mensaje="El usuario ha registrado un nuevo ejemplar en este momento: "+fechaHora;
+	 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+	String mensaje="Fecha: "+fechaHora.format(formatter)+" usuario:";
 	
 	
 	

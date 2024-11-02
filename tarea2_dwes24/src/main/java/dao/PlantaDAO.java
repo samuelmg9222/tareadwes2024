@@ -52,19 +52,72 @@ public class PlantaDAO {
 	        
 	        
 	    }
+	   public Planta obtenerdatosplanta(String cod){
+		   String nombreComun ="",nombreCientifico="";
+		   Planta planta = null;
+		   
+		   try {
+				if( this.con ==null ||this.con.isClosed()) 
+					   this.con=ConexionBD.getInstance().getConnection();
+			
+	        
+	        String sql = "SELECT nombrecientifico , nombrecomun FROM PLANTAS WHERE CODIGO =?";
+
+	        
+	             ps = con.prepareStatement(sql);
+	             ps.setString(1, cod);
+	             rs = ps.executeQuery();
+	            
+	            while (rs.next()) {
+	                 nombreComun = rs.getString("nombrecomun");
+	                 nombreCientifico = rs.getString("nombrecientifico");
+	               
+	            } 
+	             planta = new Planta(cod, nombreComun, nombreCientifico);
+	            ConexionBD.cerrarConexion();
+	            ps.close();
+	            rs.close();
+	        } catch (SQLException e) {
+	            System.err.println("Error: " + e.getMessage());
+	            e.printStackTrace();
+	        }
+		return planta;
+		   
+		   
+		   
+	   }
+	   public void modificarplantas(String cod,String nom, String nomcien){
+	   
+		   try {
+	 			if( this.con == null ||this.con.isClosed()) 
+					   this.con=ConexionBD.getInstance().getConnection();
+			
+	 			 String sql=("UPDATE PLANTAS SET NOMBRECIENTIFICO=? , NOMBRE=? WHERE CODIGO =?");
+	 			 ps = con.prepareStatement(sql);
+	             rs = ps.executeQuery();
+	            ps.setString(1, nomcien);
+	            ps.setString(2, nom);
+	            ps.setString(3, cod);
+
+	            ps.executeUpdate();
+	            ps.close();
+	            ConexionBD.cerrarConexion();
+	            
+	        } catch (SQLException e) {
+	            System.out.println("Se ha producido una SQLException: " + e.getMessage());  e.printStackTrace();
+	        }
+	   }
+	   
 	   public List<Planta> obtenerPlantas(){
 		   List<Planta> plantas = new ArrayList<>();
 		   try {
 				if( this.con ==null ||this.con.isClosed()) 
 					   this.con=ConexionBD.getInstance().getConnection();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			
 	        
 	        String sql = "SELECT * FROM PLANTAS ORDER BY nombreComun ASC";
 
-	        try {
+	       
 	             ps = con.prepareStatement(sql);
 	             rs = ps.executeQuery();
 
@@ -88,18 +141,7 @@ public class PlantaDAO {
 	       
 	    return plantas;
 	   }
-	   /*
-	   int insertar(Planta p);
-		
-			int modificar(Planta p);
-		
-			int eliminar(Planta p);
-			
-			Planta findById(int id);
-			ArrayList<Planta> findByNombre(String nombre);
-			List<Planta> findAll();
-		}
-		*/
+	 
 
 	
 

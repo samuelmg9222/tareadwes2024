@@ -163,5 +163,68 @@ public class EjemplarDAO {
 			
 			
 		}
-	}
+	 public List<Ejemplar> obtenerEjemplaresPorCodigoPlanta(String codigoPlanta) {
+	        List<Ejemplar> ejemplares = new ArrayList<>();
+	        String sql = "SELECT * FROM EJEMPLARES WHERE CODIGOPLANTA = ?";
+	        try {
+				if (this.con == null || this.con.isClosed())
+					this.con = ConexionBD.getInstance().getConnection();
+	          ps = con.prepareStatement(sql);
+	            ps.setString(1, codigoPlanta);
+	            try (ResultSet rs = ps.executeQuery()) {
+	                while (rs.next()) {
+	                    Long id = rs.getLong("id");
+	                    String nombre = rs.getString("nombre");
+	                    Ejemplar ejemplar = new Ejemplar(id, nombre);
+	                    ejemplares.add(ejemplar);
+	                }
+	                ps.close();
+	    			
+					
+				ConexionBD.cerrarConexion();
+	            }
+	        }catch (SQLException e) {
+				System.err.println("Error al consultar plantas: " + e.getMessage());
+				e.printStackTrace();
+			}
+			return ejemplares;
 
+
+	    }
+	 
+	 public List<Ejemplar> verEjemplares() {
+		 List<Ejemplar> ejemplares = new ArrayList<>();
+		 
+		 String sql = "SELECT * FROM ejemplares";
+		 try {
+				if (this.con == null || this.con.isClosed())
+					this.con = ConexionBD.getInstance().getConnection();
+	          ps = con.prepareStatement(sql);
+	            
+	            rs = ps.executeQuery();
+	                while (rs.next()) {
+	                    Long id = rs.getLong("id");
+	                    String nombre = rs.getString("nombre");
+	               
+	                    Ejemplar ejemplar = new Ejemplar(id, nombre);
+	                    ejemplares.add(ejemplar);
+	                }
+	                ps.close();
+	    			rs.close();
+					
+				ConexionBD.cerrarConexion();
+	            
+	        }catch (SQLException e) {
+				System.err.println("Error al consultar plantas: " + e.getMessage());
+				
+			}
+		return ejemplares;
+		 
+		 
+		 
+
+
+		 
+	 
+	}
+}
