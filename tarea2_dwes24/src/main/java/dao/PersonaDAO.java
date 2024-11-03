@@ -19,17 +19,16 @@ public class PersonaDAO {
 	
 
 	public  boolean existeUsuario(String cod) {
+		boolean existe = false;
+	
 		try {
 			if( this.con ==null ||this.con.isClosed()) 
 				   this.con=ConexionBD.getInstance().getConnection();
-		} catch (SQLException e) {
-			
-			e.printStackTrace();
-		}
+		
 	    String consulta = "SELECT COUNT(*) FROM personas WHERE id = ?";
-	    boolean existe = false;
+	    
 
-	    try  {
+	   
 	    	 ps = con.prepareStatement(consulta);
 	        ps.setString(1, cod);
 	        rs = ps.executeQuery();
@@ -47,5 +46,14 @@ public class PersonaDAO {
 
 	    return existe;
 	}
-}
+	
+	
+	public void nuevoUsuarioPersonal(Long id, String contraseña, String email) {
+	
+	
+	
+	
+	
+	
+}}
  
