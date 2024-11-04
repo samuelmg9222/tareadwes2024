@@ -27,7 +27,7 @@ public class EjemplarDAO {
 	public EjemplarDAO(Connection c) {
 		this.con = c;
 	}
-
+	
 	public void nuevoEjemplar(Long a,String b,String c) {
 
 
@@ -62,72 +62,75 @@ public class EjemplarDAO {
 	}
 
 	
-	
+	public  boolean existeCodigoEjemplar(String codigo) {
+		try {
+			if( this.con ==null ||this.con.isClosed()) 
+				   this.con=ConexionBD.getInstance().getConnection();
+		} catch (SQLException e) {
+			
+			e.printStackTrace();
+		}
+	    String consulta = "SELECT COUNT(*) FROM ejemplares WHERE id = ?";
+	    boolean existe = false;
+
+	    try  {
+	    	 ps = con.prepareStatement(consulta);
+	        ps.setString(1, codigo);
+
+	        rs = ps.executeQuery();
+	            if (rs.next() && rs.getInt(1) > 0) {
+	                existe = true;
+	                ps.close();
+		            ConexionBD.cerrarConexion();
+	            }
+	        
+
+	    } catch (SQLException e) {
+	        System.err.println("Error al consultar si el código ya existe: " + e.getMessage());
+	    }
+
+	    return existe;
+	}
 	
 	public void filtrarEjemplares() {
-		String codigo;
+		String codigo = null;
 		Scanner in = new Scanner(System.in);
 		Set<String> codigos = new HashSet<String>();
-		do {
-
-			System.out.println("Dame codigo de una planta para ver sus ejemplares: (INTRODUCE 0011 para salir)");
-			codigo = in.next().trim();
-			if (codigo.equals("0011")) {
-				System.out.println("Saliendo...");
-				break;
-			} 
-			if (codigos.contains(codigo)) {
-				System.out.println("Lo siento, ese codigo ya lo has introducido:");
-			} else {
+		
 				String sql = "SELECT * FROM PLANtaS WHERE CODIGO = ?";
 
 				try {
 					if (this.con == null || this.con.isClosed())
 						this.con = ConexionBD.getInstance().getConnection();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
+				
 				
 
-				try (PreparedStatement ps = con.prepareStatement(sql)) {
+				PreparedStatement ps = con.prepareStatement(sql);
 					ps.setString(1, codigo);
-					try (ResultSet rs = ps.executeQuery()) {
+					ResultSet rs = ps.executeQuery();
 						if (rs.next()) {
 							
 							codigos.add(codigo);
-							System.out.println("codigo valido,desea alguno mas?(S/N)");
-							String opc;
-							do {
-							 opc=in.next().toUpperCase().trim();
-							if(!opc.equals("S") && !opc.equals("N")) {
-								System.out.println("Introduce una opcion valida; (S/N)");
-							}
-							}while(!opc.equals("S") &&!opc.equals("N"));
-							if(opc.equals("N")) {
-								break;
-							}
-						} else {
-							System.out.println("Ese codigo de planta no existe, lo siento.");
+							
 						}
-
-					}
+					
 				} catch (SQLException e) {
 					System.err.println("Error al consultar plantas: " + e.getMessage());
 					e.printStackTrace();
 				}
 
-			}
+			
 
-		} while (!codigo.equals("0011"));
+		
 
 		
 		if(!codigos.isEmpty()) {
 			List<Ejemplar> ejemplares = new ArrayList<>();
 			Ejemplar ejemplar = null;
 			for(String c:codigos) {
-				String sql = "SELECT * FROM EJEMPLARES WHERE codigoplanta = ?";
+				String sql2 = "SELECT * FROM EJEMPLARES WHERE codigoplanta = ?";
 
-				  try (PreparedStatement ps = con.prepareStatement(sql)) {
+				  try (PreparedStatement ps = con.prepareStatement(sql2)) {
 	                    ps.setString(1, c);
 	                    try (ResultSet rs = ps.executeQuery()) {
 	                        while (rs.next()) {
@@ -227,4 +230,54 @@ public class EjemplarDAO {
 		 
 	 
 	}
+	 public String generarNombreEjemplar(String codigo) {
+			String nombreEjemplar = null;
+			 try {
+					if( this.con ==null ||this.con.isClosed()) 
+						   this.con=ConexionBD.getInstance().getConnection();
+				
+
+			
+			  String sql ="SELECT nombrecomun FROM PLANTAS WHERE CODIGO=?";
+			  
+				  ps = con.prepareStatement(sql);
+			  ps.setString(1, codigo); 
+		      rs = ps.executeQuery();
+		      
+		    if (rs.next()) {
+		    	nombreEjemplar = rs.getString("nombrecomun");
+		    }
+		    
+		} catch (SQLException e) {
+		    System.err.println("Error al generar un nuevo ID: " + e.getMessage());
+		    e.printStackTrace();
+		}
+			    
+			return nombreEjemplar;
+			
+		}
+	 
+	 public long generarIdEjemplar() {
+			long id = 0;
+			 try {
+					if( this.con ==null ||this.con.isClosed()) 
+						   this.con=ConexionBD.getInstance().getConnection();
+				
+		    
+		    String sql = "SELECT COALESCE(MAX(id), 0) + 1 AS nuevo_id FROM ejemplares";
+		    
+		    PreparedStatement ps = con.prepareStatement(sql);
+		         ResultSet rs = ps.executeQuery();
+		        
+		       
+		        if (rs.next()) {
+		            id = rs.getLong("nuevo_id");
+		        }
+		    } catch (SQLException e) {
+		        System.err.println("Error al generar un nuevo ID: " + e.getMessage());
+		        e.printStackTrace();
+		  
+		    }
+		    return id;
+		}
 }

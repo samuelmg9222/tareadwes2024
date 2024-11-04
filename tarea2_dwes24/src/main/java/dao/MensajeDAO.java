@@ -229,4 +229,28 @@ public class MensajeDAO {
 		}
 		return mensajes;
 }
+	
+	public long generarIdMensaje() {
+		long id = 0;
+	
+		 try {
+				if( this.con ==null ||this.con.isClosed()) 
+					   this.con=ConexionBD.getInstance().getConnection();
+	    
+	    String sql = "SELECT COALESCE(MAX(id), 0) + 1 AS nuevo_id FROM mensajes";
+	    
+	    PreparedStatement ps = con.prepareStatement(sql);
+	         ResultSet rs = ps.executeQuery();
+	        
+	        
+	        if (rs.next()) {
+	            id = rs.getLong("nuevo_id");
+	        }
+	    } catch (SQLException e) {
+	        System.err.println("Error al generar un nuevo ID: " + e.getMessage());
+	        e.printStackTrace();
+	  
+	    }
+	    return id;
+	}
 }

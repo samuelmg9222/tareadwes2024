@@ -42,26 +42,7 @@ public class ConexionBD {
 	}
 }
 
-/*
-	public EjemplarDAO getEjemplarDAO() {
-		return new EjemplarDAOImp(con);
-	}
 
-	public MensajeDAO getMensajeDAO() {
-		return new MensajeDAOImpl(con);
-	}
-
-	public PlantaDAO getPlantaDAO() {
-		return new PlantaDAOImpl(con);
-	}
-
-	public PersonaDAO getPersonaDAO() {
-		return new PersonaDAOImpl(con);
-	}
-	public CredencialesDAO getCredencialesDAO() {
-		return new CredencialesDAOImpl(con);
-	}
-*/
 
 	  public static ConexionBD getInstance() {
 	        
@@ -78,14 +59,7 @@ public class ConexionBD {
 
 	    
 	    public  Connection getConnection() {
-//	    	try {
-//				if (con== null || con.isClosed()) {
-//					 f = new ConexionBD();
-//				}
-//			} catch (SQLException e) {
-//				System.out.println("Se ha producido una SQLException: " + e.getMessage());
-//				e.printStackTrace();
-//			}
+
 	        return con;
 	    }
 	    
@@ -99,4 +73,16 @@ public class ConexionBD {
 				e.printStackTrace();
 			}
 		}
+	    
+	  
+
+
+	    private PlantaDAO plantaDAO = null;
+	    public PlantaDAO getPlantaDAO() {
+	        
+			if (plantaDAO == null) {
+	            plantaDAO = new PlantaDAO(getConnection()); 
+	        }
+	        return plantaDAO;
+	    }
 }

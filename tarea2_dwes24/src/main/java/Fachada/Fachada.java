@@ -21,6 +21,7 @@ import modelo.Ejemplar;
 import modelo.Mensaje;
 import modelo.Planta;
 import principal.ConexionBD;
+import principal.Controlador;
 import utilidades.Utils;
 
 public class Fachada {
@@ -30,15 +31,21 @@ public class Fachada {
 
 	public Fachada(Connection c) {
 		this.con = c;
-		this.plantaDAO = new PlantaDAO(con);
+		
 	}
-
+	private static Fachada portal;
 	Utils utils = new Utils(con);
 	PersonaDAO personaDAO = new PersonaDAO(con);
 	EjemplarDAO ejemplarDao = new EjemplarDAO(ConexionBD.getInstance().getConnection());
 	PlantaDAO plantaDAO = new PlantaDAO(ConexionBD.getInstance().getConnection());
 	MensajeDAO mensajeDAO = new MensajeDAO(ConexionBD.getInstance().getConnection());
 
+	
+	public static Fachada getPortal() {
+		if (portal==null)
+			portal=new Fachada(ConexionBD.getInstance().getConnection());
+		return portal;
+	}
 	public void mostrarMenuPrincipal() {
 		System.out.println("\n\tSeleccione una opción:\n");
 		System.out.println("\t1.  Gestionar Plantas.\n");
@@ -141,53 +148,45 @@ public class Fachada {
 			switch (opcionInt) {
 			case 1:
 
-				String nombreComun;
-				String codigo;
-				String nombreCientifico;
-				Utils utils = new Utils(con);
+				 String nombreComun;
+				    String codigo;
+				    String nombreCientifico;
 
-				do {
-					System.out.println("Dame codigo de una nueva planta (FORMATO DE 4 NUMEROS [0000])");
-					codigo = in.next().trim();
-					if (utils.existeCodigoPlanta(codigo)) {
-						System.out.println("Ese codigo ya existe, no es posible");
-					} else if (!codigo.matches("\\d{4}")) {
-						System.out.println("Formato no valido");
-					}
-				} while (!codigo.matches("\\d{4}") || utils.existeCodigoPlanta(codigo));
+				    
+				   
+				        System.out.println("Dame código de una nueva planta (FORMATO DE 4 NÚMEROS [0000]):");
+				        codigo = in.next().trim();
+				    
 
-				do {
-					System.out.println("Dame nombre comun de la planta");
-					nombreComun = in.next().trim().toUpperCase();
-					if (!nombreComun.matches("[A-ZÁÉÍÓÚÑ][a-zA-ZÁÉÍÓÚÑáéíóúñ\\s]{2,99}")) {
-						System.out
-								.println("Dato invalido. Solo se aceptan letras y nombres de entre 3 y 100 caracteres");
-					}
-				} while (!nombreComun.matches("[A-ZÁÉÍÓÚÑ][a-zA-ZÁÉÍÓÚÑáéíóúñ\\s]{2,99}"));
+				    
+				        System.out.println("Dame nombre común de la planta:");
+				        nombreComun = in.next().trim().toUpperCase();
+				    
 
-				do {
-					System.out.println("Dame nombre científico de la planta:");
-					nombreCientifico = in.next().trim().toUpperCase();
-
-					if (!nombreCientifico.matches("[A-ZÁÉÍÓÚÑ][a-zA-ZÁÉÍÓÚÑáéíóúñ\\s]{2,99}")) {
-						System.out.println(
-								"Dato inválido. Solo se aceptan letras y nombres de entre 3 y 100 caracteres.");
-					}
-				} while (!nombreCientifico.matches("[A-ZÁÉÍÓÚÑ][a-zA-ZÁÉÍÓÚÑáéíóúñ\\s]{2,99}"));
-
-				try {
-					plantaDAO.insertarPlanta(codigo, nombreComun, nombreCientifico);
-					System.out.println(
-							nombreComun + " (" + nombreCientifico + ") ingresada con exito: codgio " + codigo + "");
-
-				} catch (Exception e) {
-					System.out.println("Se ha producido una excepcion: " + e.getMessage());
-				}
+				    
+				        System.out.println("Dame nombre científico de la planta:");
+				        nombreCientifico = in.next().trim().toUpperCase();
+				   
+				        Planta p=new Planta(codigo,nombreComun,nombreCientifico);
+				    
+				    if (Controlador.getServicios().getServiciosPlanta().verificarPlanta(p)) {
+				        try {
+				            
+				            Controlador.getServicios().getServiciosPlanta().InsertarPlanta(p); 
+				            System.out.println(nombreComun + " (" + nombreCientifico + ") ingresada con éxito: código " + codigo + ".");
+				        } catch (Exception e) {
+				            System.out.println("Se ha producido una excepción: " + e.getMessage());
+				        }
+				    } else {
+				        System.out.println("Los datos de la planta no son válidos. No se puede agregar.");
+				    }
+				
 
 				break;
 
 			case 2:
-				List<Planta> plantas = plantaDAO.obtenerPlantas();
+				List<Planta> plantas=Controlador.getServicios().getServiciosPlanta().findAll();
+						
 
 				System.out.println(Utils.obtenerEncabezado());
 				for (Planta pl : plantas) {
@@ -196,55 +195,45 @@ public class Fachada {
 				break;
 
 			case 3:
-				Utils utils2 = new Utils(con);
-				String cod, nombreCien, nombreC;
+		
+codigo=""; nombreComun=""; nombreCientifico="";
+List<Planta> plantas2=Controlador.getServicios().getServiciosPlanta().findAll();
 
-				do {
-					System.out.println("Dame codigo de la planta que deesea modificar (FORMATO DE 4 NUMEROS [0000])");
-					cod = in.next().trim();
-					if (!utils2.existeCodigoPlanta(cod)) {
-						System.out.println("No existe planta con ese codigo");
 
-					}
-				} while (!utils2.existeCodigoPlanta(cod));
-				Planta plantaAntigua = plantaDAO.obtenerdatosplanta(cod);
-				do {
-					do {
-						System.out.println("Dame nombre comun que desea poner a la planta");
-						nombreC = in.next().trim().toUpperCase();
-						if (!nombreC.matches("[A-ZÁÉÍÓÚÑ][a-zA-ZÁÉÍÓÚÑáéíóúñ\\s]{2,99}")) {
-							System.out.println(
-									"Dato invalido. Solo se aceptan letras y nombres de entre 3 y 100 caracteres");
-						}
-					} while (!nombreC.matches("[A-ZÁÉÍÓÚÑ][a-zA-ZÁÉÍÓÚÑáéíóúñ\\s]{2,99}"));
+System.out.println(Utils.obtenerEncabezado());
+for (Planta pl : plantas2) {
+	System.out.println(pl);
+}
+			        try {
+			            System.out.println("Dame código de la planta que desea modificar (FORMATO DE 4 NÚMEROS [0000]):");
+			            codigo = in.next().trim();
+			           
+			     
 
-					do {
-						System.out.println("Dame nombre científico de la planta:");
-						nombreCien = in.next().trim().toUpperCase();
+			        
+			        Planta plantaAntigua = Controlador.getServicios().getServiciosPlanta().obtenerdatosplanta(codigo)); 
+			        
+			        System.out.println("El nombre común actual es: " + plantaAntigua.getNombrecomun());
+			        System.out.println("El nombre científico actual es: " + plantaAntigua.getNombrecientifico());
 
-						if (!nombreCien.matches("[A-ZÁÉÍÓÚÑ][a-zA-ZÁÉÍÓÚÑáéíóúñ\\s]{2,99}")) {
-							System.out.println(
-									"Dato inválido. Solo se aceptan letras y nombres de entre 3 y 100 caracteres.");
-						}
-					} while (!nombreCien.matches("[A-ZÁÉÍÓÚÑ][a-zA-ZÁÉÍÓÚÑáéíóúñ\\s]{2,99}"));
-					if (plantaAntigua.getNombrecomun().equals(nombreC)
-							&& plantaAntigua.getNombrecientifico().equals(nombreCien)) {
-						System.out.println(
-								"No se ha podidop realizar el cambio debido a que no has puesto nada distinto.");
-					}
-				} while (plantaAntigua.getNombrecomun().equals(nombreC)
-						&& plantaAntigua.getNombrecientifico().equals(nombreCien));
-				try {
-					plantaDAO.modificarplantas(cod, nombreCien, nombreC);
-					System.out.println("Para la planta de codigo " + cod + ", ha cambiado el nombre de:"
-							+ plantaAntigua.getNombrecomun() + " a: " + nombreC
-							+ " y ha cambiado el nombre cientifico de: " + plantaAntigua.getNombrecientifico() + " a: "
-							+ nombreCien);
-				} catch (Exception e) {
-					System.out.println("Se ha producido una Exception: " + e.getMessage());
+			   
+			        System.out.println("Dame nombre común que desea poner a la planta. Si no desea modificarlo, introduce su nombre como está:");
+			        nombreComun = in.next().trim().toUpperCase();
 
-					e.printStackTrace();
-				}
+			        System.out.println("Dame nombre científico de la planta. Si no desea modificarlo, introduce su nombre como está:");
+			        nombreCientifico = in.next().trim().toUpperCase();
+			        Planta pl=new Planta(codigo,nombreComun,nombreCientifico);
+				    
+			        if (Controlador.getServicios().getServiciosPlanta().verificarModificacion(pl)) {
+			        	 Controlador.getServicios().getServiciosPlanta().modificarPlanta(pl); 
+				            System.out.println(nombreComun + " (" + nombreCientifico + ") ingresada con éxito: código " + codigo + ".");
+			        	
+			        }else {
+			        	System.out.println("No se ha podido relaizar la modificación");
+			        }
+			        } catch (Exception e) {
+			            System.out.println("Se ha producido una excepción: " + e.getMessage());
+			        }
 			case 99:
 				break;
 			default:
@@ -287,20 +276,20 @@ public class Fachada {
 				String nombre;
 				Scanner in1 = new Scanner(System.in);
 				boolean existe = false;
-				Utils utils = new Utils(con);
+				
 				do {
 					System.out.println("Dame código de una planta:");
 					codigoplanta = in1.next().trim();
-					existe = utils.existeCodigoPlanta(codigoplanta);
+					existe = plantaDAO.existeCodigoPlanta(codigoplanta);
 
 					if (!existe) {
 						System.out.println("El código no existe. Por favor, ingrese un código valido.");
 					}
 				} while (!existe);
-				long id = utils.generarIdEjemplar();
-				String nombregenerado = utils.generarNombreEjemplar(codigoplanta);
+				long id = ejemplarDao.generarIdEjemplar();
+				String nombregenerado = ejemplarDao.generarNombreEjemplar(codigoplanta);
 				nombre = id + "_" + nombregenerado;
-				long idMensj = utils.generarIdMensaje();
+				long idMensj = mensajeDAO.generarIdMensaje();
 				 LocalDateTime fechaH = LocalDateTime.now();
 				String usuario = "";
 				try {
@@ -314,7 +303,7 @@ public class Fachada {
 			case 2:
 				String codigo = "";
 				Set<String> codigos = new HashSet<>();
-				Utils utils2 = new Utils(con);
+
 				do {
 					System.out
 							.println("Dame código de una planta para ver sus ejemplares: (INTRODUCE 9999 para salir)");
@@ -328,7 +317,7 @@ public class Fachada {
 						System.out.println("ese código ya lo has introducido:");
 					} else {
 
-						if (utils2.existeCodigoPlanta(codigo)) {
+						if (plantaDAO.existeCodigoPlanta(codigo)) {
 							codigos.add(codigo);
 							System.out.println("Código válido, ¿desea alguno más? (S/N)");
 							String opc;
@@ -368,7 +357,7 @@ public class Fachada {
 				
 				
 			case 3:
-				Utils utils3 = new Utils(con);
+			
 				String idEjem;
 				List <Ejemplar> ejemplares =ejemplarDao.verEjemplares();
 				for(Ejemplar c: ejemplares) {
@@ -377,7 +366,7 @@ public class Fachada {
 				do {
 					System.out.println("Dame un id de ejemplar para ver mensajes asociados:");
 					idEjem = in.next().trim();
-					existe = utils3.existeCodigoEjemplar(idEjem);
+					existe = ejemplarDao.existeCodigoEjemplar(idEjem);
 
 					if (!existe) {
 						System.out.println("El id no existe. Por favor, ingrese un id valido.");
@@ -441,7 +430,7 @@ public class Fachada {
 				do {
 					System.out.println("Dame código del ejemplar sobre el que quieres escribir mensaje:");
 					codigoEjemplar = in1.next().trim();
-					existe = utils.existeCodigoEjemplar(codigoEjemplar);
+					existe = ejemplarDao.existeCodigoEjemplar(codigoEjemplar);
 
 					if (!existe) {
 						System.out.println("El código no existe. Por favor, ingrese un código valido.");
@@ -449,7 +438,7 @@ public class Fachada {
 				} while (!existe);
 				Long idej = Long.parseLong(codigoEjemplar);
 
-				mensajeDAO.nuevoMensaje(utils.generarIdMensaje(), fechaHora, utils.generarmensaje(), idej, 58446725L);
+				mensajeDAO.nuevoMensaje(mensajeDAO.generarIdMensaje(), fechaHora, utils.generarmensaje(), idej, 58446725L);
 				break;
 
 			case 2:
@@ -509,15 +498,15 @@ public class Fachada {
 					case 2:
 						String cod2;
 						Long codigo2;
-						Utils utils3 = new Utils(con);
+					
 						do {
 							System.out.println("Dame codigo de la planta sobre el que se han escrito mensajes");
 							cod2 = in.next().trim();
-							if (!utils3.existeCodigoPlanta(cod2)) {
+							if (!plantaDAO.existeCodigoPlanta(cod2)) {
 								System.out.println("No existe planta con ese codigo");
 
 							}
-						} while (!utils3.existeCodigoPlanta(cod2)||!cod2.matches("\\d+"));
+						} while (!plantaDAO.existeCodigoPlanta(cod2)||!cod2.matches("\\d+"));
 						
 						
 						 try {

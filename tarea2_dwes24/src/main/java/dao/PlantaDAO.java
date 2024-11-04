@@ -28,7 +28,7 @@ public class PlantaDAO {
 	        this.con = c;
 	    }
 	    
-	   public void insertarPlanta(String a, String b, String c) {
+	   public int insertarPlanta(Planta p) {
 		   
 
 	        try {
@@ -37,9 +37,9 @@ public class PlantaDAO {
 			
 	            ps = con.prepareStatement("INSERT INTO plantas(codigo, nombrecomun, nombrecientifico) VALUES(?, ?, ?)");
 	            
-	            ps.setString(1, a);
-	            ps.setString(2, b);
-	            ps.setString(3, c);
+	            ps.setString(1, p.getCodigo());
+	            ps.setString(2, p.getNombrecomun());
+	            ps.setString(3, p.getNombrecientifico());
 
 	            ps.executeUpdate();
 	            ps.close();
@@ -48,10 +48,38 @@ public class PlantaDAO {
 	        } catch (SQLException e) {
 	            System.out.println("Se ha producido una SQLException: " + e.getMessage());  e.printStackTrace();
 	        }
+			return 0;
 
-	        
-	        
 	    }
+	   public  boolean existeCodigoPlanta(String codigo) {
+		    boolean existe = false;
+			try {
+				if( this.con ==null ||this.con.isClosed()) 
+					   this.con=ConexionBD.getInstance().getConnection();
+			
+				
+			
+		    String consulta = "SELECT COUNT(*) FROM plantas WHERE codigo = ?";
+
+
+		    
+		    	 ps = con.prepareStatement(consulta);
+		        ps.setString(1, codigo);
+
+		        rs = ps.executeQuery();
+		            if (rs.next() && rs.getInt(1) > 0) {
+		                existe = true;
+		                ps.close();
+			            ConexionBD.cerrarConexion();
+		            }
+		        
+
+		    } catch (SQLException e) {
+		        System.err.println("Error al consultar si el código ya existe: " + e.getMessage());
+		    }
+
+		    return existe;
+		}
 	   public Planta obtenerdatosplanta(String cod){
 		   String nombreComun ="",nombreCientifico="";
 		   Planta planta = null;
@@ -86,29 +114,30 @@ public class PlantaDAO {
 		   
 		   
 	   }
-	   public void modificarplantas(String cod,String nom, String nomcien){
+	   public int  modificarplantas(Planta p){
 	   
 		   try {
 	 			if( this.con == null ||this.con.isClosed()) 
 					   this.con=ConexionBD.getInstance().getConnection();
-			
-	 			 String sql=("UPDATE PLANTAS SET NOMBRECIENTIFICO=? , NOMBRE=? WHERE CODIGO =?");
+	 			String sql=("UPDATE PLANTAS SET NOMBRECIENTIFICO=? , NOMBRECOMUN=? WHERE CODIGO =?");
 	 			 ps = con.prepareStatement(sql);
-	             rs = ps.executeQuery();
-	            ps.setString(1, nomcien);
-	            ps.setString(2, nom);
-	            ps.setString(3, cod);
+	             
+	            ps.setString(1, p.getNombrecientifico());
+	            ps.setString(2, p.getNombrecomun());
+	            ps.setString(3, p.getCodigo());
 
 	            ps.executeUpdate();
-	            ps.close();
-	            ConexionBD.cerrarConexion();
+	            
+
+	          
 	            
 	        } catch (SQLException e) {
 	            System.out.println("Se ha producido una SQLException: " + e.getMessage());  e.printStackTrace();
 	        }
+		return 0;
 	   }
 	   
-	   public List<Planta> obtenerPlantas(){
+	   public List<Planta> findAll(){
 		   List<Planta> plantas = new ArrayList<>();
 		   try {
 				if( this.con ==null ||this.con.isClosed()) 
