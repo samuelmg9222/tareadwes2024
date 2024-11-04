@@ -6,15 +6,21 @@ public class Credenciales {
     private Long id;
     private String usuario;
     private String password;
-
-    public Credenciales(Long id, String usuario, String password) {
+    private Long idpersona;
+    public Credenciales(Long id, String usuario, String password, Long idpersona) {
         this.id = id;
         this.usuario = usuario;
         this.password = password;
+        this.idpersona = idpersona;
     }
+    
 
-    // Getters y Setters
-    public Long getId() {
+    public Credenciales() {
+		super();
+	}
+
+
+	public Long getId() {
         return id;
     }
 
@@ -38,22 +44,14 @@ public class Credenciales {
         this.password = password;
     }
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(id, password, usuario);
+
+	
+	public Long getIdpersona() {
+		return idpersona;
 	}
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Credenciales other = (Credenciales) obj;
-		return Objects.equals(id, other.id) && Objects.equals(password, other.password)
-				&& Objects.equals(usuario, other.usuario);
+	public void setIdpersona(Long idpersona) {
+		this.idpersona = idpersona;
 	}
 
 	@Override

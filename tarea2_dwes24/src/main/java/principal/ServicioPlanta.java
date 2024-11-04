@@ -46,8 +46,8 @@ public class ServicioPlanta {
 	}
 	
 
-	 public List<Planta> findAll() {
-	        return plantaDAO.findAll();
+	public List<Planta> findAll() {
+        return plantaDAO.findAll();
 
 }
 public boolean existeCodigoPlanta(String p) {
@@ -63,10 +63,16 @@ public int modificarPlanta(Planta p) {
 	return plantaDAO.modificarplantas(p);
 	
 }
+
+
+
 public Planta obtenerdatosplanta(String codigo) {
 	return plantaDAO.obtenerdatosplanta(codigo);
 	
 }
+
+
+
 	public boolean verificarModificacion(Planta p) {
 if (!p.getCodigo().matches("\\d{4}")) {
 	        

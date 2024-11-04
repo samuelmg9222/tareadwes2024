@@ -30,7 +30,7 @@ public static String obtenerEncabezado() {
 
 
 
-public String generarmensaje() {
+public static String generarmensaje() {
 	 LocalDateTime fechaHora = LocalDateTime.now();
 	 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 	String mensaje="Fecha: "+fechaHora.format(formatter)+" usuario:";

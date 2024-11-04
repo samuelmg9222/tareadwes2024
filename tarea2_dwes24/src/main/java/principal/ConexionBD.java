@@ -85,4 +85,28 @@ public class ConexionBD {
 	        }
 	        return plantaDAO;
 	    }
+	    private EjemplarDAO ejemplarDAO = null;
+	    public EjemplarDAO getEjemplarDAO() {
+	        
+			if (ejemplarDAO == null) {
+				ejemplarDAO = new EjemplarDAO(getConnection()); 
+	        }
+	        return ejemplarDAO;
+	    }
+	    private MensajeDAO mensajeDAO = null;
+	    public MensajeDAO getMensajeDAO() {
+	        
+		 	if (mensajeDAO == null) {
+				mensajeDAO = new MensajeDAO(getConnection()); 
+	        }
+	        return mensajeDAO;
+	    }
+	    private PersonaDAO personaDAO = null;
+	    public PersonaDAO getPersonaDAO() {
+	        
+			if (personaDAO == null) {
+				personaDAO = new PersonaDAO(getConnection()); 
+	        }
+	        return personaDAO;
+	    }
 }

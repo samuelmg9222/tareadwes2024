@@ -28,7 +28,7 @@ public class EjemplarDAO {
 		this.con = c;
 	}
 	
-	public void nuevoEjemplar(Long a,String b,String c) {
+	public int nuevoEjemplar(Ejemplar ej,String codigoplanta) {
 
 
 		String sqlIns = "INSERT INTO ejemplares(id, nombre, codigoplanta) VALUES(?, ?, ?)";
@@ -39,9 +39,9 @@ public class EjemplarDAO {
 		
 		PreparedStatement ps = con.prepareStatement(sqlIns);
 
-			ps.setLong(1, a);
-			ps.setString(2, b);
-			ps.setString(3, c);
+			ps.setLong(1, ej.getId());
+			ps.setString(2, ej.getNombre());
+			ps.setString(3, codigoplanta);
 			
 			ps.executeUpdate();
 			ps.close();
@@ -54,6 +54,7 @@ public class EjemplarDAO {
 			System.out.println("Se ha producido una SQLException: " + e.getMessage());
 			e.printStackTrace();
 		}
+		return 0;
 		
 			
 
@@ -142,11 +143,7 @@ public class EjemplarDAO {
 	                           
 
 	                        }
-	                        System.out.println("Ejemplares con codigo de planta "+c);
-	                        for (Ejemplar pl : ejemplares) {
-        	                    System.out.println(pl);
-        	                }
-                            ejemplares.remove(ejemplar);
+	                      
 	                    }catch (SQLException e) {
 	    					System.err.println("Error al consultar plantas: " + e.getMessage());
 	    					e.printStackTrace();

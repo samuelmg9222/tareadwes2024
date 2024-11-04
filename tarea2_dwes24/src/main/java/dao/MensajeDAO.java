@@ -24,26 +24,26 @@ public class MensajeDAO {
 		this.con = c;
 	}
 
-	public void nuevoMensaje(Long idMensaje, LocalDateTime fechaHora, String mensaje, Long idEjemplar, Long idPersona) {
+	public int nuevoMensaje(Mensaje m) {
 		try {
 			if (this.con == null || this.con.isClosed())
 				this.con = ConexionBD.getInstance().getConnection();
 
 			String sqlIns2 = "INSERT INTO mensajes(id, fechahora, mensaje, idejemplar, idpersona) VALUES(?, ?, ?, ?, ?)";
 			PreparedStatement ps2 = con.prepareStatement(sqlIns2);
-			ps2.setLong(1, idMensaje);
-			 ps2.setTimestamp(2, Timestamp.valueOf(fechaHora));
-			ps2.setString(3, mensaje);
-			ps2.setLong(4, idEjemplar);
-			ps2.setLong(5, idPersona);
+			ps2.setLong(1, m.getIdEjemplar());
+			 ps2.setTimestamp(2, Timestamp.valueOf(m.getFechaHora()));
+			ps2.setString(3, m.getMensaje());
+			ps2.setLong(4, m.getIdEjemplar());
+			ps2.setLong(5, m.getIdPersona());
 			ps2.executeUpdate();
 			ps2.close();
 
 			String sqlIns3 = "INSERT INTO seguimientos(idpersona, idejemplar, idmensaje) VALUES(?, ?, ?)";
 			PreparedStatement ps3 = con.prepareStatement(sqlIns3);
-			ps3.setLong(1, idPersona);
-			ps3.setLong(2, idEjemplar);
-			ps3.setLong(3, idMensaje);
+			ps3.setLong(1, m.getIdPersona());
+			ps3.setLong(2, m.getIdEjemplar());
+			ps3.setLong(3, m.getId());
 			ps3.executeUpdate();
 			ps3.close();
 
@@ -51,6 +51,7 @@ public class MensajeDAO {
 			System.out.println("Se ha producido una SQLException en `nuevoMensaje`: " + e.getMessage());
 			e.printStackTrace();
 		}
+		return 0;
 	}
 
 	
