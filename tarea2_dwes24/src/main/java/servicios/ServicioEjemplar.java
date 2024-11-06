@@ -1,4 +1,4 @@
-package principal;
+package servicios;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,6 +7,8 @@ import dao.EjemplarDAO;
 import dao.PlantaDAO;
 import modelo.Ejemplar;
 import modelo.Planta;
+import principal.ConexionBD;
+import principal.Controlador;
 
 public class ServicioEjemplar {
 	private ConexionBD con;

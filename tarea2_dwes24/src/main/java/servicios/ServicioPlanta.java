@@ -1,9 +1,10 @@
-package principal;
+package servicios;
 
 import java.util.List;
 
 import dao.PlantaDAO;
 import modelo.Planta;
+import principal.ConexionBD;
 
 public class ServicioPlanta {
 
@@ -53,10 +54,10 @@ public class ServicioPlanta {
 public boolean existeCodigoPlanta(String p) {
     if (plantaDAO.existeCodigoPlanta(p)) {
         
-        return false;
+        return true;
     
 }
-	return true;
+	return false;
 
 }
 public int modificarPlanta(Planta p) {
@@ -73,13 +74,11 @@ public Planta obtenerdatosplanta(String codigo) {
 
 
 
-	public boolean verificarModificacion(Planta p) {
-if (!p.getCodigo().matches("\\d{4}")) {
-	        
-	        return false;
-	    }
-	    if (!plantaDAO.existeCodigoPlanta(p.getCodigo())) {
-	        
+	public boolean verificarModificacion(Planta p, List<Planta> plantas2, int ind) {
+
+	   
+	    
+	    if (ind < 1 || (ind-1)>=plantas2.size()) {
 	        return false;
 	    }
 	    
@@ -93,7 +92,7 @@ if (!p.getCodigo().matches("\\d{4}")) {
 	        return false;
 	    }
 	    Planta plantaAntigua = plantaDAO.obtenerdatosplanta(p.getCodigo());
-  if (p.getNombrecientifico()==plantaAntigua.getNombrecientifico() &&p.getNombrecomun()==plantaAntigua.getNombrecomun ()) {
+  if (p.getNombrecientifico().equals(plantaAntigua.getNombrecientifico()) &&p.getNombrecomun().equals(plantaAntigua.getNombrecomun ())) {
 	        
 	        return false;
 	    }

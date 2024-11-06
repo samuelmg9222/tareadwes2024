@@ -26,6 +26,7 @@ import principal.Controlador;
 import utilidades.Utils;
 
 public class Fachada {
+	/*
 	private Connection con;
 	private PreparedStatement ps;
 	private ResultSet rs;
@@ -567,4 +568,5 @@ for (Planta pl : plantas2) {
 			System.out.println(pl);
 		}
 	}
+	*/
 }

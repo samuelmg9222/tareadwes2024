@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import modelo.Persona;
 import principal.ConexionBD;
 
 public class PersonaDAO {
@@ -57,7 +58,74 @@ public class PersonaDAO {
 	
 }
 	
+	public String obtenerNombreUsuario(Long id) {
+		
+		 String nombre = null;
+	
+		try {
+			if( this.con ==null ||this.con.isClosed()) 
+				   this.con=ConexionBD.getInstance().getConnection();
+		
+	    String consulta = "SELECT nombre FROM personas WHERE id = ?";
+	   
+
+	   
+	    	 ps = con.prepareStatement(consulta);
+	        ps.setLong(1, id);
+	       rs = ps.executeQuery();
+	        
+	       if (rs.next()) {
+	            nombre = rs.getString("nombre");
+	        }
+	                ps.close();
+	                rs.close();
+		            ConexionBD.cerrarConexion();
+	            
+	        
+
+	    } catch (SQLException e) {
+	        System.err.println("Error al consultar si el código ya existe: " + e.getMessage());
+	    }
+		return nombre;
+
 
 
 }
- 
+	
+	public Persona obtenerDatosPersona(Long id) {
+		
+	
+	Persona persona =new Persona();
+		try {
+			if( this.con ==null ||this.con.isClosed()) 
+				   this.con=ConexionBD.getInstance().getConnection();
+		
+	    String consulta = "SELECT Persona.id, Persona.nombre, Persona.email FROM Persona JOIN Credenciales ON Persona.id = Credenciales.id_persona WHERE Credenciales.id_persona = ?";
+	   
+
+	   
+	    	 ps = con.prepareStatement(consulta);
+	        ps.setLong(1, id);
+	       rs = ps.executeQuery();
+	        
+	       if (rs.next()) {
+	    	   Long personaId = rs.getLong("id");
+	           String nombre = rs.getString("nombre");
+	           String email = rs.getString("email");
+
+	           
+	           persona = new Persona(personaId, nombre, email);}
+	                ps.close();
+	                rs.close();
+		            ConexionBD.cerrarConexion();
+	            
+	        
+
+	    } catch (SQLException e) {
+	        System.err.println("Error al consultar si el código ya existe: " + e.getMessage());
+	    }
+		return persona;
+	
+	
+	
+}}

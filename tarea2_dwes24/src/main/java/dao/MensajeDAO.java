@@ -24,7 +24,7 @@ public class MensajeDAO {
 		this.con = c;
 	}
 
-	public int nuevoMensaje(Mensaje m) {
+	public int nuevoMensaje(Mensaje m,Long idpersona) {
 		try {
 			if (this.con == null || this.con.isClosed())
 				this.con = ConexionBD.getInstance().getConnection();
@@ -35,7 +35,7 @@ public class MensajeDAO {
 			 ps2.setTimestamp(2, Timestamp.valueOf(m.getFechaHora()));
 			ps2.setString(3, m.getMensaje());
 			ps2.setLong(4, m.getIdEjemplar());
-			ps2.setLong(5, m.getIdPersona());
+			ps2.setLong(5, idpersona);
 			ps2.executeUpdate();
 			ps2.close();
 
@@ -247,6 +247,9 @@ public class MensajeDAO {
 	        if (rs.next()) {
 	            id = rs.getLong("nuevo_id");
 	        }
+	        ps.close();
+	        rs.close();
+	        ConexionBD.cerrarConexion();
 	    } catch (SQLException e) {
 	        System.err.println("Error al generar un nuevo ID: " + e.getMessage());
 	        e.printStackTrace();

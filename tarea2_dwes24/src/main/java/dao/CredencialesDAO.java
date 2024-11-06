@@ -56,6 +56,8 @@ public class  CredencialesDAO {
 	        String sql = "SELECT * FROM credenciales WHERE usuario = ?";
 
 	        try {
+				if (this.con == null || this.con.isClosed())
+					this.con = ConexionBD.getInstance().getConnection();
 	            ps = con.prepareStatement(sql);
 	            ps.setString(1, user);
 	            rs = ps.executeQuery();
@@ -64,19 +66,22 @@ public class  CredencialesDAO {
 	                Long id = rs.getLong("id");
 	                String usuario = rs.getString("usuario");
 	                String password = rs.getString("password");
-	                Long idPersona = rs.getLong("id");
+	                Long idPersona = rs.getLong("idpersona");
 	                credenciales.setId(id);
 	                credenciales.setUsuario(usuario);
 	                credenciales.setPassword(password);
 	                credenciales.setIdpersona(idPersona);
 	            }
-
+	            ps.close();
+	            rs.close();
+	            ConexionBD.cerrarConexion();
 	        } catch (SQLException e) {
 	            System.err.println("Error " + e.getMessage());
 	        }
 
 	        return credenciales;
 	    }
+	    
 
 	    public boolean insertarcredenciales(Credenciales credenciales) {
 	        String sql = "INSERT INTO credenciales (usuario, password, idpersona) VALUES (?, ?, ?)";
@@ -94,5 +99,16 @@ public class  CredencialesDAO {
 	            System.err.println("Error al guardar la credencial --> " + e.getMessage());
 	            return false;
 	        }
-}
+	        
+	    }
+	        
+	      
+	        
+
+	    
+	    
+	    
+	    
+	    
+	    
 }

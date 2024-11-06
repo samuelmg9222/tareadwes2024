@@ -1,4 +1,4 @@
-package principal;
+package servicios;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -7,6 +7,7 @@ import dao.EjemplarDAO;
 import dao.MensajeDAO;
 import modelo.Ejemplar;
 import modelo.Mensaje;
+import principal.ConexionBD;
 
 public class ServicioMensaje {
 	private ConexionBD con;
@@ -18,8 +19,8 @@ public ServicioMensaje() {
 }
 
 
-public int InsertarMensaje(Mensaje m) {
-	return mensajeDAO.nuevoMensaje(m);
+public int InsertarMensaje(Mensaje m,Long idpersona) {
+	return mensajeDAO.nuevoMensaje(m,idpersona);
 }
 public Long generarIdMensaje() {
 	return mensajeDAO.generarIdMensaje();

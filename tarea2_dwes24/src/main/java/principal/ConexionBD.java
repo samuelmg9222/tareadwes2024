@@ -109,4 +109,14 @@ public class ConexionBD {
 	        }
 	        return personaDAO;
 	    }
+
+
+	    private CredencialesDAO credencialesDAO = null;
+		public CredencialesDAO getCredencialesDAO() {
+			if (credencialesDAO == null) {
+				credencialesDAO = new CredencialesDAO(getConnection()); 
+	        }
+	        return credencialesDAO;
+		
+		}
 }
