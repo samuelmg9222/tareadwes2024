@@ -81,7 +81,7 @@ public List<Ejemplar> findAll() {
 }
 
     public boolean existeCodigoEjemplar(String p) {
-        if (ejemplarDAO.existeCodigoEjemplar(p)) {
+        if (!ejemplarDAO.existeCodigoEjemplar(p)) {
             
             return false;
         

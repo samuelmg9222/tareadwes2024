@@ -36,10 +36,10 @@ public class PersonaDAO {
 	        
 	            if (rs.next() && rs.getInt(1) > 0) {
 	                existe = true;
-	                ps.close();
-		            ConexionBD.cerrarConexion();
+	                
 	            }
-	        
+	            ps.close();
+	            ConexionBD.cerrarConexion();
 
 	    } catch (SQLException e) {
 	        System.err.println("Error al consultar si el código ya existe: " + e.getMessage());

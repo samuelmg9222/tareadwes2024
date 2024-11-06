@@ -46,7 +46,7 @@ public class EjemplarDAO {
 			ps.executeUpdate();
 			ps.close();
 			
-					 System.out.println("Inserción en la tabla `ejemplares` completada con éxito.");
+					 
 				ConexionBD.cerrarConexion();
 			
 

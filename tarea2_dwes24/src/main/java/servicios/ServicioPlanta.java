@@ -19,7 +19,7 @@ public class ServicioPlanta {
 	
 	public boolean verificarPlanta(Planta p) {
 	   
-	    if (!p.getCodigo().matches("\\d{4}")) {
+	    if (!p.getCodigo().matches("[A-Z]{4}")) {
 	        
 	        return false;
 	    }

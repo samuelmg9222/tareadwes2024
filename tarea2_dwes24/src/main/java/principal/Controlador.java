@@ -23,8 +23,8 @@ public class Controlador {
 	private Controlador() {
 		servPlanta=new ServicioPlanta();
 		servEjemplar=new ServicioEjemplar();
-		servPlanta=new ServicioPlanta();
-		servPlanta=new ServicioPlanta();
+		
+		servPersona=new ServicioPersona();
 		servMensaje=new ServicioMensaje();
 		servCredenciales=new ServicioCredenciales();
 	}

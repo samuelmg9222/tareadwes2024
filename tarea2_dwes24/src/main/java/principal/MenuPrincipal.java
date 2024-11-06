@@ -36,7 +36,7 @@ public class MenuPrincipal{
 
 		    public void mostrarMenuPrincipal() {
 		    	int opcionint=-1;
-		        while (activo) {
+		        do {
 		            System.out.println("\nSistema Gestor del Vivero (Modo invitado)\n");
 		            System.out.println("1 - Visualizar plantas\n");
 		            System.out.println("2 - Iniciar sesión\n");
@@ -44,7 +44,6 @@ public class MenuPrincipal{
 		            System.out.println("Selecciona una opción: ");
 		            String opcion=in.next().trim();
 		            try {
-
 						opcionint = Integer.parseInt(opcion.trim());
 
 					} catch (NumberFormatException e) {
@@ -65,13 +64,14 @@ public class MenuPrincipal{
 		                	 System.out.println("Intentando iniciar sesión...");
 		                    iniciarSesion();
 		                    break;
-		                
+		                case 99:
+		                	 System.out.println("Cerrando...");
 		                  
 		                default:
 		                    opcNoValida();
 		                    break;
 		            }
-		        }
+		        }while(opcionint!=99);
 		    }
 
 

@@ -31,7 +31,7 @@ public class MensajeDAO {
 
 			String sqlIns2 = "INSERT INTO mensajes(id, fechahora, mensaje, idejemplar, idpersona) VALUES(?, ?, ?, ?, ?)";
 			PreparedStatement ps2 = con.prepareStatement(sqlIns2);
-			ps2.setLong(1, m.getIdEjemplar());
+			ps2.setLong(1, m.getId());
 			 ps2.setTimestamp(2, Timestamp.valueOf(m.getFechaHora()));
 			ps2.setString(3, m.getMensaje());
 			ps2.setLong(4, m.getIdEjemplar());
@@ -100,7 +100,7 @@ public class MensajeDAO {
 		return mensajes;
 	}
 	
-	public List<Mensaje> filtrarMensajeTipoPlanta(Long codigo) {
+	public List<Mensaje> filtrarMensajeTipoPlanta(String codigo) {
 		List<Mensaje> mensajes = new ArrayList<>();
 		String mens ="";
 		Long idEjemplar,idPersona;
@@ -110,10 +110,10 @@ public class MensajeDAO {
 			if (this.con == null || this.con.isClosed())
 				this.con = ConexionBD.getInstance().getConnection();
 
-			String sql1 = "SELECT * FROM mensajes WHERE idejemplar = (SELECT id FROM ejemplares WHERE codigoplanta = ?)";
+			String sql1 = "SELECT * FROM mensajes WHERE idejemplar IN (SELECT id FROM ejemplares WHERE codigoplanta = ?)";
 
 			 ps = con.prepareStatement(sql1);
-             ps.setLong(1, codigo);
+             ps.setString(1, codigo);
              rs = ps.executeQuery();
             
             while (rs.next()) {
@@ -249,7 +249,7 @@ public class MensajeDAO {
 	        }
 	        ps.close();
 	        rs.close();
-	        ConexionBD.cerrarConexion();
+	        
 	    } catch (SQLException e) {
 	        System.err.println("Error al generar un nuevo ID: " + e.getMessage());
 	        e.printStackTrace();

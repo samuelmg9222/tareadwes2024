@@ -60,7 +60,7 @@ public class VistaPlantas {
 
 				    
 				   
-				        System.out.println("Dame código de una nueva planta (FORMATO DE 4 NÚMEROS [0000]):");
+				        System.out.println("Dame código de una nueva planta (FORMATO DE 4 LETRAS SIN TILDES [AAAA]):");
 				        codigo = in.next().trim();
 				    
 
@@ -130,7 +130,7 @@ int ind =Integer.parseInt(indice);
 			            System.out.println("Se ha producido una excepción: " + e.getMessage());
 			        }
 			        break;
-			case 6:
+			
 				
 			
 			case 99:

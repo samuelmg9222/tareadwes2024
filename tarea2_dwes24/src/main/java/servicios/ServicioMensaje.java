@@ -31,7 +31,7 @@ public List<Mensaje> filtrarMensajeEjemplar(String idEjem){
 public List<Mensaje> filtrarMensajePersona(Long idPer){
 	return mensajeDAO.filtrarMensajePersona(idPer);
 }
-public List<Mensaje> filtrarMensajeTipoPlanta(Long codplanta){
+public List<Mensaje> filtrarMensajeTipoPlanta(String codplanta){
 	return mensajeDAO.filtrarMensajeTipoPlanta(codplanta);
 }
 public List<Mensaje> filtrarMensajeRangoFechas(LocalDate inicio,LocalDate fin){

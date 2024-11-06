@@ -22,7 +22,7 @@ public ServicioCredenciales() {
 	
 	   public int registro(String usuario, String contraseña){
 	        Credenciales credenciales = credencialesDAO.findByUsuario(usuario);
-	        if (usuario.equals("admin") && contraseña.equals("12345678")){
+	        if (usuario.equals("admin") && contraseña.equals("admin")){
 	            return 0;
 	        }
 
