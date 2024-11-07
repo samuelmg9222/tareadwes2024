@@ -29,7 +29,7 @@ public class EjemplarDAO {
 	}
 	
 	public int nuevoEjemplar(Ejemplar ej,String codigoplanta) {
-
+int ins=0;
 
 		String sqlIns = "INSERT INTO ejemplares(id, nombre, codigoplanta) VALUES(?, ?, ?)";
 		try {
@@ -43,7 +43,7 @@ public class EjemplarDAO {
 			ps.setString(2, ej.getNombre());
 			ps.setString(3, codigoplanta);
 			
-			ps.executeUpdate();
+			ins=ps.executeUpdate();
 			ps.close();
 			
 					 
@@ -54,7 +54,7 @@ public class EjemplarDAO {
 			System.out.println("Se ha producido una SQLException: " + e.getMessage());
 			e.printStackTrace();
 		}
-		return 0;
+		return ins;
 		
 			
 
@@ -228,7 +228,7 @@ public class EjemplarDAO {
 	 
 	}
 	 public String generarNombreEjemplar(String codigo) {
-			String nombreEjemplar = null;
+			String nombreEjemplar = "";
 			 try {
 					if( this.con ==null ||this.con.isClosed()) 
 						   this.con=ConexionBD.getInstance().getConnection();

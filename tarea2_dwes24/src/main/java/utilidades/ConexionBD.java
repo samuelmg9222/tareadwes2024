@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 import com.mysql.cj.jdbc.MysqlDataSource;
-
+import com.mysql.cj.jdbc.exceptions.CommunicationsException;
 
 import dao.*;
 
@@ -32,14 +32,18 @@ public class ConexionBD {
 		m.setUser(prop.getProperty("usuario"));
 		con = m.getConnection();
 		
-	} catch (FileNotFoundException e) {
-		System.out.println("Error al acceder al fichero properties " + e.getMessage());
-	} catch (IOException e) {
-		System.out.println("Error al leer las propiedades del fichero properties" + e.getMessage());
-	} catch (SQLException e) {
-		
-		e.printStackTrace();
-	}
+	} catch (CommunicationsException e) {
+        System.out.println("Error: No se pudo conectar al servidor de la base de datos. Verifique si el servidor está activo.");
+    } catch (FileNotFoundException e) {
+        System.out.println("Error al acceder al fichero properties: " + e.getMessage());
+    } catch (IOException e) {
+        System.out.println("Error al leer las propiedades del fichero properties: " + e.getMessage());
+    } catch (SQLException e) {
+        System.out.println("Error SQL al intentar conectar a la base de datos: " + e.getMessage());
+    }catch(Exception e) {
+    	e.getMessage();
+    }
+	
 }
 
 
@@ -61,8 +65,8 @@ public class ConexionBD {
 	    public  Connection getConnection() {
 
 	        return con;
+	   
 	    }
-	    
 	    public static void cerrarConexion() {
 			try {
 				if (f.getConnection() != null && !f.getConnection().isClosed()) {

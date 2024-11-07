@@ -47,19 +47,7 @@ public String generarNombreEjemplar(String cd) {
 public List<Ejemplar> obtenerEjemplaresPorCodigo(String codigo) {
     return ejemplarDAO.obtenerEjemplaresPorCodigoPlanta(codigo);
 }
-/*
-public void verificarentradaFiltrarPorCodPlanta(String codigo) {
-	 while (true) {
-if (codigo.equals("9999")) {
-    
-    
-    break;
-}
 
-procesarCodigo(codigo);
-	 }
-}
-*/
 public boolean procesarCodigo(String codigo,ArrayList<String> cods) {
 	
     if (cods.contains(codigo)) {

@@ -29,7 +29,7 @@ public class PlantaDAO {
 	    }
 	    
 	   public int insertarPlanta(Planta p) {
-		   
+		   int exito=0;
 
 	        try {
 	 			if( this.con == null ||this.con.isClosed()) 
@@ -41,14 +41,15 @@ public class PlantaDAO {
 	            ps.setString(2, p.getNombrecomun());
 	            ps.setString(3, p.getNombrecientifico());
 
-	            ps.executeUpdate();
+	           exito =ps.executeUpdate();
 	            ps.close();
 	            ConexionBD.cerrarConexion();
 	            
 	        } catch (SQLException e) {
 	            System.out.println("Se ha producido una SQLException: " + e.getMessage());  e.printStackTrace();
 	        }
-			return 0;
+			return exito;
+			
 
 	    }
 	   public  boolean existeCodigoPlanta(String codigo) {

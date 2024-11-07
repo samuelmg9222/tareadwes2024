@@ -65,28 +65,30 @@ public class VistaEjemplares {
 
 			switch (opcionInt) {
 			case 1:
-				String codigoplanta;
-				String nombre;
-				
-				Scanner in1 = new Scanner(System.in);
-				boolean existe = false;
-				List<Planta> plantas3=Controlador.getServicios().getServiciosPlanta().findAll();
+				List<Planta> plantas3=new ArrayList<Planta>();
+				if (Controlador.getServicios().getServiciosPlanta().findAll() != null &&
+				!Controlador.getServicios().getServiciosPlanta().findAll().isEmpty()) {
+				 plantas3=Controlador.getServicios().getServiciosPlanta().findAll();
 
 
 				System.out.println("   "+Utils.obtenerEncabezado());
-				int k=1;
+				int i=1;
 
 				for (Planta pl : plantas3) {
 
-					System.out.println(k+": "+pl.getNombrecomun()+"\t"+pl.getNombrecientifico());
-					k++;
+					System.out.println(i+": "+pl.getNombrecomun()+"\t"+pl.getNombrecientifico());
+					i++;
+				}
+				} else {
+				    System.out.println("No se ha podido mostrar el listado o la lista está vacía.");
+				   break;
 				}
 							        try {
 							            System.out.println("Dame el numero (indice) de la planta que desea modificar:");
 							           String indice = in.next().trim();
 							           
 				int ind =Integer.parseInt(indice);
-			
+				Long idEj;
 					
 					
 				
@@ -95,13 +97,30 @@ public class VistaEjemplares {
 				
 				 if(Controlador.getServicios().getServiciosPlanta().existeCodigoPlanta(plantas3.get(ind-1).getCodigo())) {
 			
-					Long idEj = Controlador.getServicios().getServiciosEjemplar().generarIdEjemplar();
+					 if( Controlador.getServicios().getServiciosEjemplar().generarIdEjemplar()==0) {
+						 System.out.println("Error al generar idEjemplar. No se ha podido completar el proceso");
+						 break;
+					 }else {
+						idEj= Controlador.getServicios().getServiciosEjemplar().generarIdEjemplar();
+						if(Controlador.getServicios().getServiciosEjemplar().generarNombreEjemplar(plantas3.get(ind-1).getCodigo()).isBlank()){
+							System.out.println("Error al generar nombre del ejemplar. No se ha podido completar el proceso");
+						}else {
 					Ejemplar ej=new Ejemplar(idEj, (idEj +"_"+Controlador.getServicios().getServiciosEjemplar().generarNombreEjemplar(plantas3.get(ind-1).getCodigo())));
-					Controlador.getServicios().getServiciosEjemplar().InsertarEjemplar(ej, plantas3.get(ind-1).getCodigo());
+					
+					
+					if(Controlador.getServicios().getServiciosEjemplar().InsertarEjemplar(ej, plantas3.get(ind-1).getCodigo())==0) {
+						System.out.println("No se ha podido insertar el ejemplar");
+						break;
+					}else {
+					if(Controlador.getServicios().getServiciosMensaje().generarIdMensaje() ==0)	{
+						System.out.println("No se ha podido generar el idmensaje");
+					}else {
 					Mensaje ms=new Mensaje(Controlador.getServicios().getServiciosMensaje().generarIdMensaje(),fechaH,Utils.generarmensaje(idpersona),idEj,idpersona);
-					Controlador.getServicios().getServiciosMensaje().InsertarMensaje(ms,idpersona);
+					if(Controlador.getServicios().getServiciosMensaje().InsertarMensaje(ms,idpersona)==0) {
+						System.out.println("No se ha podido insertar el mensaje");
+					}else{
 					System.out.println("Se ha registrado el ejemplar correctamente.  Tambien se ha registrado un mensaje: "+ms.getMensaje());
-				 }
+					}}}} } }else System.out.println("No existe el codigo introducido");
 				 } catch (Exception e) {
 					System.out.println("No se ha podido completar el proceso. El indice tiene que ser un numero de los mostrados");
 				}
@@ -189,8 +208,13 @@ public class VistaEjemplares {
 			case 3:
 				String idEjem;
 				String ind;
-				List <Ejemplar> ejemplares =Controlador.getServicios().getServiciosEjemplar().findAll();
 				int j=1;
+				List<Ejemplar> ejemplares=new ArrayList<Ejemplar>();
+				List <Mensaje> mensajesAsociados=new ArrayList <Mensaje>();
+				if (Controlador.getServicios().getServiciosEjemplar().findAll() != null &&
+				!Controlador.getServicios().getServiciosEjemplar().findAll().isEmpty()) {
+				
+					ejemplares=Controlador.getServicios().getServiciosEjemplar().findAll();
 				for(Ejemplar c: ejemplares) {
 					System.out.println(j+".  id: "+c.getId()+"  nombre: "+c.getNombre());
 					j++;
@@ -211,10 +235,13 @@ public class VistaEjemplares {
 					
 				if(Controlador.getServicios().getServiciosEjemplar().existeCodigoEjemplar(idEjem)) {
 				try {
-				List <Mensaje> mensajesAsociados =Controlador.getServicios().getServiciosMensaje().filtrarMensajeEjemplar(idEjem);
-				if (mensajesAsociados.isEmpty()) {
+					if (Controlador.getServicios().getServiciosMensaje().filtrarMensajeEjemplar(idEjem) != null &&
+							!Controlador.getServicios().getServiciosMensaje().filtrarMensajeEjemplar(idEjem).isEmpty()) {
+							
+			
 				    System.out.println("Ese ejemplar no tiene mensajes asociados");
 				} else {
+					mensajesAsociados=Controlador.getServicios().getServiciosMensaje().filtrarMensajeEjemplar(idEjem);
 				    for (Mensaje m : mensajesAsociados) {
 				        System.out.println("Autor id y nombre " + m.getIdPersona()+"  "+Controlador.getServicios().getServiciosPersona().obtenerNombreUsuario(m.getIdPersona())+"\tFecha y hora: " + m.getFechaHora().format(formatter));
 				    }
@@ -223,8 +250,9 @@ public class VistaEjemplares {
 				}
 					}else
 						System.out.println("Codigo no valido");
+				}else
 				    break;
-		
+		break;
 
 	
 			case 4:

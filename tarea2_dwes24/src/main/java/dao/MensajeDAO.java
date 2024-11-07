@@ -25,6 +25,7 @@ public class MensajeDAO {
 	}
 
 	public int nuevoMensaje(Mensaje m,Long idpersona) {
+		int ins=0;
 		try {
 			if (this.con == null || this.con.isClosed())
 				this.con = ConexionBD.getInstance().getConnection();
@@ -36,7 +37,7 @@ public class MensajeDAO {
 			ps2.setString(3, m.getMensaje());
 			ps2.setLong(4, m.getIdEjemplar());
 			ps2.setLong(5, idpersona);
-			ps2.executeUpdate();
+			ins =ps2.executeUpdate();
 			ps2.close();
 
 			String sqlIns3 = "INSERT INTO seguimientos(idpersona, idejemplar, idmensaje) VALUES(?, ?, ?)";

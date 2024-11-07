@@ -16,27 +16,27 @@ public class ServicioPlanta {
 		plantaDAO = (PlantaDAO) con.getPlantaDAO();
 	}
 
-	public boolean verificarPlanta(Planta p) {
+	public int verificarPlanta(Planta p) {
 
 		if (!p.getCodigo().matches("[A-Z]{4}")) {
 
-			return false;
+			return -1;
 		}
 		if (plantaDAO.existeCodigoPlanta(p.getCodigo())) {
 
-			return false;
+			return -2;
 		}
 
 		if (!p.getNombrecomun().matches("[A-Z][a-zA-Z\\s]{2,99}")) {
 
-			return false;
+			return -3;
 		}
 
 		if (!p.getNombrecientifico().matches("[A-Z][a-zA-Z\\s]{2,99}")) {
 
-			return false;
+			return -4;
 		}
-		return true;
+		return 1;
 	}
 
 	public int InsertarPlanta(Planta p) {
@@ -68,29 +68,29 @@ public class ServicioPlanta {
 
 	}
 
-	public boolean verificarModificacion(Planta p, List<Planta> plantas2, int ind) {
+	public int verificarModificacion(Planta p, List<Planta> plantas2, int ind) {
 
 		if (ind < 1 || (ind - 1) >= plantas2.size()) {
-			return false;
+			return -1;
 		}
 
 		if (!p.getNombrecomun().matches("[A-Z][a-zA-Z\\s]{2,99}")) {
 
-			return false;
+			return -2;
 		}
 
 		if (!p.getNombrecientifico().matches("[A-Z][a-zA-Z\\s]{2,99}")) {
 
-			return false;
+			return -3;
 		}
 		Planta plantaAntigua = plantaDAO.obtenerdatosplanta(p.getCodigo());
 		if (p.getNombrecientifico().equals(plantaAntigua.getNombrecientifico())
 				&& p.getNombrecomun().equals(plantaAntigua.getNombrecomun())) {
 
-			return false;
+			return -4;
 		}
 
-		return true;
+		return 1;
 	}
 
 }
