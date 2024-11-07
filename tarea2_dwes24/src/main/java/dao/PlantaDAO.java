@@ -16,7 +16,7 @@ import com.mysql.cj.jdbc.MysqlDataSource;
 import com.mysql.cj.xdevapi.Statement;
 
 import modelo.Planta;
-import principal.ConexionBD;
+import utilidades.ConexionBD;
 import utilidades.Utils;
 
 public class PlantaDAO {
@@ -126,7 +126,7 @@ public class PlantaDAO {
 	            ps.setString(2, p.getNombrecomun());
 	            ps.setString(3, p.getCodigo());
 
-	            ps.executeUpdate();
+	        return ps.executeUpdate();
 	            
 
 	          

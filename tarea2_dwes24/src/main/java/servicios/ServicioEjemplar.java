@@ -3,12 +3,12 @@ package servicios;
 import java.util.ArrayList;
 import java.util.List;
 
+import controlador.Controlador;
 import dao.EjemplarDAO;
 import dao.PlantaDAO;
 import modelo.Ejemplar;
 import modelo.Planta;
-import principal.ConexionBD;
-import principal.Controlador;
+import utilidades.ConexionBD;
 
 public class ServicioEjemplar {
 	private ConexionBD con;
@@ -47,7 +47,7 @@ public String generarNombreEjemplar(String cd) {
 public List<Ejemplar> obtenerEjemplaresPorCodigo(String codigo) {
     return ejemplarDAO.obtenerEjemplaresPorCodigoPlanta(codigo);
 }
-
+/*
 public void verificarentradaFiltrarPorCodPlanta(String codigo) {
 	 while (true) {
 if (codigo.equals("9999")) {
@@ -59,11 +59,12 @@ if (codigo.equals("9999")) {
 procesarCodigo(codigo);
 	 }
 }
-
-public void procesarCodigo(String codigo) {
-	ArrayList <String> cods =new ArrayList<String>();
+*/
+public boolean procesarCodigo(String codigo,ArrayList<String> cods) {
+	
     if (cods.contains(codigo)) {
         System.out.println("Ese código ya lo has introducido.");
+        return false;
     } else if (Controlador.getServicios().getServiciosPlanta().existeCodigoPlanta(codigo)) {
     	cods.add(codigo);
       
@@ -71,7 +72,9 @@ public void procesarCodigo(String codigo) {
     	 
     }else {
     	System.out.println ("Ese código de planta no existe.");
+    	return false;
 }
+	return true;
     
 }
 

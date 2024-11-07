@@ -1,5 +1,5 @@
 import Fachada.Fachada;
-import principal.MenuPrincipal;
+import vista.MenuPrincipal;
 
 
 public class Vivero {

@@ -1,4 +1,4 @@
-package principal;
+package controlador;
 
 import servicios.ServicioCredenciales;
 import servicios.ServicioEjemplar;
@@ -40,6 +40,7 @@ public class Controlador {
 	public ServicioMensaje getServiciosMensaje() {
 		return servMensaje;
 	}
+	
 	public ServicioCredenciales getServiciosCredenciales() {
 		return servCredenciales;
 	}

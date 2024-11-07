@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
 
+import controlador.Controlador;
 import dao.EjemplarDAO;
 import dao.MensajeDAO;
 import dao.PersonaDAO;
@@ -21,8 +22,7 @@ import dao.PlantaDAO;
 import modelo.Ejemplar;
 import modelo.Mensaje;
 import modelo.Planta;
-import principal.ConexionBD;
-import principal.Controlador;
+import utilidades.ConexionBD;
 import utilidades.Utils;
 
 public class Fachada {

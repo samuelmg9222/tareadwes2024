@@ -3,7 +3,7 @@ package servicios;
 import dao.CredencialesDAO;
 import dao.MensajeDAO;
 import modelo.Credenciales;
-import principal.ConexionBD;
+import utilidades.ConexionBD;
 
 public class ServicioCredenciales {
 	private ConexionBD con;

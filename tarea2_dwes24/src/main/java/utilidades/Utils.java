@@ -7,8 +7,6 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-import principal.ConexionBD;
-
 public class Utils {
 	
 	
@@ -30,10 +28,10 @@ public static String obtenerEncabezado() {
 
 
 
-public static String generarmensaje() {
+public static String generarmensaje(Long iduser) {
 	 LocalDateTime fechaHora = LocalDateTime.now();
 	 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-	String mensaje="Fecha: "+fechaHora.format(formatter)+" usuario:";
+	String mensaje="Fecha: "+fechaHora.format(formatter)+" usuario: "+iduser;
 	
 	
 	

@@ -1,9 +1,11 @@
 package servicios;
 
+import java.util.List;
+
 import dao.MensajeDAO;
 import dao.PersonaDAO;
 import modelo.Persona;
-import principal.ConexionBD;
+import utilidades.ConexionBD;
 
 public class ServicioPersona {
 	private ConexionBD con;
@@ -26,5 +28,7 @@ public  String obtenerNombreUsuario(Long cod) {
 public Persona obtenerDatosPersona(Long id) {
 	return personaDAO.obtenerDatosPersona(id);
 }
-
+public List<Persona> Find() {
+	return personaDAO.findAll();
+}
 }

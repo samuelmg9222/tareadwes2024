@@ -7,7 +7,7 @@ import dao.EjemplarDAO;
 import dao.MensajeDAO;
 import modelo.Ejemplar;
 import modelo.Mensaje;
-import principal.ConexionBD;
+import utilidades.ConexionBD;
 
 public class ServicioMensaje {
 	private ConexionBD con;

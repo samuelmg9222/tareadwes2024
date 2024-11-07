@@ -13,7 +13,7 @@ import java.util.List;
 
 import modelo.Mensaje;
 import modelo.Planta;
-import principal.ConexionBD;
+import utilidades.ConexionBD;
 
 public class MensajeDAO {
 	private Connection con;
@@ -32,7 +32,7 @@ public class MensajeDAO {
 			String sqlIns2 = "INSERT INTO mensajes(id, fechahora, mensaje, idejemplar, idpersona) VALUES(?, ?, ?, ?, ?)";
 			PreparedStatement ps2 = con.prepareStatement(sqlIns2);
 			ps2.setLong(1, m.getId());
-			 ps2.setTimestamp(2, Timestamp.valueOf(m.getFechaHora()));
+			 ps2.setTimestamp(2, Timestamp.valueOf(m.getFechaHora()));//Esto  sirve para insertar LocalDateTime con el formato dd-MM-yyyy HH:mm:ss
 			ps2.setString(3, m.getMensaje());
 			ps2.setLong(4, m.getIdEjemplar());
 			ps2.setLong(5, idpersona);

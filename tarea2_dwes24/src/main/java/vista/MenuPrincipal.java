@@ -1,4 +1,4 @@
-package principal;
+package vista;
 
 
 
@@ -7,12 +7,11 @@ import java.util.List;
 import java.util.Scanner;
 
 import Fachada.Fachada;
+import controlador.Controlador;
 import dao.PlantaDAO;
 import dao.EjemplarDAO;
 import modelo.Credenciales;
 import modelo.Planta;
-import vista.VistaEjemplares;
-import vista.VistaPlantas;
 
 public class MenuPrincipal{
 
@@ -61,7 +60,6 @@ public class MenuPrincipal{
 		                    mostrarListadoPlantas();
 		                    break;
 		                case 2:
-		                	 System.out.println("Intentando iniciar sesión...");
 		                    iniciarSesion();
 		                    break;
 		                case 99:
@@ -105,10 +103,10 @@ public class MenuPrincipal{
 		    private void mostrarMenuUsuarioPersonal() {
 		        boolean activo = true;
 		        while (activo) {
-		            System.out.println("\nMenú del Personal");
-		            System.out.println("Usuario actual: " + username+"\n");
-		            System.out.println("1 - Gestión de ejemplares\n");
-		            System.out.println("99 - Cerrar sesión\n");
+		            System.out.println("\n\t\tMenú del Personal");
+		            System.out.println("\t\tUsuario actual: " + username+"\n");
+		            System.out.println("\t\t1 - Gestión de ejemplares\n");
+		            System.out.println("\t\t99 - Cerrar sesión\n");
 
 		            int opcion = 0 ;
 		            switch (opcion) {
@@ -116,7 +114,7 @@ public class MenuPrincipal{
 		                	VistaPlantas.getPortalvistaPlantas().listarPlantas();
 		                    break;
 		                case 99:
-		                    System.out.println("Sesión cerrada. Volviendo al menú principal...");
+		                    System.out.println("Sesión cerrada. Volviendo al menú invitado...");
 		                    activo = false;
 		                    break;
 		                default:
@@ -130,8 +128,8 @@ public class MenuPrincipal{
 		    
 		    private void mostrarMenuAdmin() {
 		    int	opcionIntAdmin=-1;
-		        boolean activo = true;
-		        while (activo) {
+		        
+		        do {
 		            System.out.println("\nMenú del Administrador\n");
 		            System.out.println("1 - Gestión de plantas\n");
 		            System.out.println("2 - Gestión de ejemplares\n");
@@ -147,8 +145,8 @@ public class MenuPrincipal{
 						opcionIntAdmin = -1;
 					}
 					if (opcionIntAdmin == 99) {
-						System.out.println("Saliendo...");
-						activo=false;
+						System.out.println("Sesión cerrada. Volviendo al menú invitado...");
+						
 						break;
 					}
 		            
@@ -165,7 +163,7 @@ public class MenuPrincipal{
 		                    opcNoValida();
 		                    break;
 		            }
-		        }
+		        }while(opcionIntAdmin != 99);
 		    }
 		
 

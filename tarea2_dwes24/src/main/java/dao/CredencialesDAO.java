@@ -9,7 +9,7 @@ import java.util.List;
 
 import modelo.Credenciales;
 import modelo.Persona;
-import principal.ConexionBD;
+import utilidades.ConexionBD;
 
 public class  CredencialesDAO {
 	

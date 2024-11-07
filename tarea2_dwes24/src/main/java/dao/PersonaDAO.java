@@ -4,9 +4,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import modelo.Persona;
-import principal.ConexionBD;
+import modelo.Planta;
+import utilidades.ConexionBD;
 
 public class PersonaDAO {
 
@@ -58,6 +61,40 @@ public class PersonaDAO {
 	
 }
 	
+	
+	 public List<Persona> findAll(){
+		   List<Persona> Personas = new ArrayList<>();
+		   try {
+				if( this.con ==null ||this.con.isClosed()) 
+					   this.con=ConexionBD.getInstance().getConnection();
+			
+	        
+	        String sql = "SELECT * FROM personas";
+
+	       
+	             ps = con.prepareStatement(sql);
+	             rs = ps.executeQuery();
+
+	            while (rs.next()) {
+	                long id = rs.getLong("id");
+	                String nombre= rs.getString("email");
+	                String email = rs.getString("nombre");
+
+	                Persona persona = new Persona(id, nombre, email);
+	                Personas.add(persona);
+	               
+	            } 
+	          
+	            ConexionBD.cerrarConexion();
+	            ps.close();
+	            rs.close();
+	        } catch (SQLException e) {
+	            System.err.println("Error: " + e.getMessage());
+	            e.printStackTrace();
+	        }
+	       
+	    return Personas;
+	   }
 	public String obtenerNombreUsuario(Long id) {
 		
 		 String nombre = null;

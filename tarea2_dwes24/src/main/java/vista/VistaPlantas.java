@@ -4,9 +4,9 @@ import java.sql.Connection;
 import java.util.List;
 import java.util.Scanner;
 
+import controlador.Controlador;
 import modelo.Planta;
-import principal.ConexionBD;
-import principal.Controlador;
+import utilidades.ConexionBD;
 import utilidades.Utils;
 
 public class VistaPlantas {
@@ -101,16 +101,18 @@ codigo=""; nombreComun=""; nombreCientifico="";
 List<Planta> plantas2=Controlador.getServicios().getServiciosPlanta().findAll();
 
 
-System.out.println(Utils.obtenerEncabezado());
+System.out.println("   "+Utils.obtenerEncabezado());
 int i=1;
+
 for (Planta pl : plantas2) {
 
-	System.out.println(i+": "+pl);
+	System.out.println(i+": "+pl.getNombrecomun()+"\t"+pl.getNombrecientifico());
 	i++;
 }
 			        try {
 			            System.out.println("Dame el numero (indice) de la planta que desea modificar:");
 			           String indice = in.next().trim();
+			           
 int ind =Integer.parseInt(indice);
 			        System.out.println("Dame nombre común que desea poner a la planta. Si no desea modificarlo, introduce su nombre como está:");
 			        nombreComun = in.next().trim().toUpperCase();
@@ -127,12 +129,10 @@ int ind =Integer.parseInt(indice);
 			        	System.out.println("No se ha podido relaizar la modificación.");
 			        }
 			        } catch (Exception e) {
-			            System.out.println("Se ha producido una excepción: " + e.getMessage());
+			            System.out.println("No se ha podido relaizar la modificación. ");
 			        }
 			        break;
-			
-				
-			
+
 			case 99:
 				break;
 			default:

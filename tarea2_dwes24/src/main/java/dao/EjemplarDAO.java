@@ -16,7 +16,7 @@ import com.mysql.cj.xdevapi.Statement;
 
 import modelo.Ejemplar;
 import modelo.Planta;
-import principal.ConexionBD;
+import utilidades.ConexionBD;
 import utilidades.Utils;
 
 public class EjemplarDAO {
