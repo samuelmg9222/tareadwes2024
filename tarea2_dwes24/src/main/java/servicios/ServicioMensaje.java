@@ -25,7 +25,7 @@ public int InsertarMensaje(Mensaje m,Long idpersona) {
 public Long generarIdMensaje() {
 	return mensajeDAO.generarIdMensaje();
 }
-public List<Mensaje> filtrarMensajeEjemplar(String idEjem){
+public List<Mensaje> filtrarMensajeEjemplar(Long idEjem){
 	return mensajeDAO.filtrarMensajeEjemplar(idEjem);
 }
 public List<Mensaje> filtrarMensajePersona(Long idPer){
@@ -39,19 +39,18 @@ public List<Mensaje> filtrarMensajeRangoFechas(LocalDate inicio,LocalDate fin){
 }
 
 
-public boolean verificarfecha(LocalDate fechaInicio,LocalDate fechaFin,LocalDate fechaActual) {
+public int verificarfecha(LocalDate fechaInicio,LocalDate fechaFin,LocalDate fechaActual) {
 	if (fechaInicio.isAfter(fechaFin)) {
-        System.out.println("La fecha de inicio debe ser anterior o igual a la fecha de fin. Intenta de nuevo.");
-        return false;
+      
+        return -1;
     }
 	
     
     if (fechaInicio.isAfter(fechaActual)) {
-        System.out.println("La fecha de inicio no puede ser posterior al día actual. Intenta de nuevo.");
-        fechaInicio = null; 
-        return false; 
+        
+        return -2; 
     }
-	return true;
+	return 1;
 }
 
 

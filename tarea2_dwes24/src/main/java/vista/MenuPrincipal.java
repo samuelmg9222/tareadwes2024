@@ -20,7 +20,7 @@ public class MenuPrincipal{
 	
 		VistaPlantas portalVPlantas= VistaPlantas.getPortalvistaPlantas();
 		VistaEjemplares portalVEjemplares= VistaEjemplares.getPortalvistaEjemplares();
-
+		VistaPersona portalVPersonas= VistaPersona.getPortalvistaPersona();
 		private Scanner in = new Scanner(System.in);
 
 		
@@ -36,12 +36,17 @@ public class MenuPrincipal{
 		    public void mostrarMenuPrincipal() {
 		    	int opcionint=-1;
 		        do {
-		            System.out.println("\nSistema Gestor del Vivero (Modo invitado)\n");
-		            System.out.println("1 - Visualizar plantas\n");
-		            System.out.println("2 - Iniciar sesión\n");
-		            System.out.println("99 - Salir de la aplicación\n");
-		            System.out.println("Selecciona una opción: ");
+		        	
+		            System.out.println("\n\tSistema Gestor del Vivero (Modo invitado)\n");
+		            System.out.println("\t1 - Visualizar plantas\n");
+		            System.out.println("\t2 - Iniciar sesión\n");
+		            System.out.println("\t99 - Salir de la aplicación\n");
+		            System.out.println("\tSelecciona una opción: ");
 		            String opcion=in.next().trim();
+		            if (!opcion.matches("\\d+")) {  
+		                System.out.println("Entrada no válida. Por favor, introduzca solo un número sin espacios.");
+		                continue;
+		            }
 		            try {
 						opcionint = Integer.parseInt(opcion.trim());
 
@@ -82,7 +87,7 @@ public class MenuPrincipal{
 		        System.out.println("Nombre de usuario: ");
 				username = in.next().toLowerCase().trim();
 		        System.out.println("Contraseña: ");
-		        password = in.next();
+		        password = in.next().trim();
 		        int tipouser= Controlador.getServicios().getServiciosCredenciales().registro(username, password);
 		        	Credenciales cr=Controlador.getServicios().getServiciosCredenciales().findBy(username);
 		        	 idpersona = cr.getIdpersona();
@@ -91,8 +96,10 @@ public class MenuPrincipal{
 		            System.out.println("Contrasña o usuario incorrectos");
 		        } else if (tipouser == 1) {
 		            mostrarMenuUsuarioPersonal();
+		            
 		        } else if (tipouser == 0) {
 		            mostrarMenuAdmin();
+		   
 		        }
 		    }
 
@@ -107,7 +114,7 @@ public class MenuPrincipal{
 		            System.out.println("\t\tUsuario actual: " + username+"\n");
 		            System.out.println("\t\t1 - Gestión de ejemplares\n");
 		            System.out.println("\t\t99 - Cerrar sesión\n");
-
+		         
 		            int opcion = 0 ;
 		            switch (opcion) {
 		                case 1:
@@ -130,12 +137,17 @@ public class MenuPrincipal{
 		    int	opcionIntAdmin=-1;
 		        
 		        do {
-		            System.out.println("\nMenú del Administrador\n");
-		            System.out.println("1 - Gestión de plantas\n");
-		            System.out.println("2 - Gestión de ejemplares\n");
-		            System.out.println("3 - Gestión de empleados\n");
-		            System.out.println("99 - Cerrar sesión\n");
+		            System.out.println("\n\tMenú del Administrador\n");
+		            System.out.println("\t1 - Gestión de plantas\n");
+		            System.out.println("\t2 - Gestión de ejemplares\n");
+		            System.out.println("\t3 - Gestión de empleados\n");
+		            System.out.println("\t99 - Cerrar sesión\n");
 		            String opcion=in.next().trim();
+		            if (!opcion.matches("\\d+")) {  
+		                System.out.println("Entrada no válida. Por favor, introduzca solo un número sin espacios.");
+		                
+		                continue;
+		            }
 		            try {
 
 		            	opcionIntAdmin = Integer.parseInt(opcion.trim());
@@ -158,11 +170,13 @@ public class MenuPrincipal{
 		                case 2:
 		                   portalVEjemplares.mostrarMenuGestionEjemplares(idpersona);
 		                    break;
-		                
+		                case 3:
+		                	portalVPersonas.mostrarMenuGestionPersonas(idpersona);
 		               default:
 		                    opcNoValida();
 		                    break;
 		            }
+		            
 		        }while(opcionIntAdmin != 99);
 		    }
 		

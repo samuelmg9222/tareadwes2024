@@ -52,7 +52,7 @@ public class MensajeDAO {
 			System.out.println("Se ha producido una SQLException en `nuevoMensaje`: " + e.getMessage());
 			e.printStackTrace();
 		}
-		return 0;
+		return ins;
 	}
 
 	
@@ -188,7 +188,7 @@ public class MensajeDAO {
 		return mensajes;
 	}
 
-	public List<Mensaje> filtrarMensajeEjemplar(String idEjem) {
+	public List<Mensaje> filtrarMensajeEjemplar(long idEjem) {
 		List<Mensaje> mensajes = new ArrayList<>();
 		
 		
@@ -198,9 +198,9 @@ public class MensajeDAO {
 			if (this.con == null || this.con.isClosed())
 				this.con = ConexionBD.getInstance().getConnection();
 
-			String sql1 = "Select * FROM mensajes where idejemplar=? order by fechahora desc;";//Asi se añaden primero los mas recientes
+			String sql1 = "Select * FROM mensajes where idejemplar=? order by fechahora desc;";
 			ps = con.prepareStatement(sql1);
-			ps.setString(1, idEjem);
+			ps.setLong(1, idEjem);
             rs = ps.executeQuery();
          
            

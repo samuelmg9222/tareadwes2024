@@ -12,8 +12,6 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Scanner;
 
-import com.mysql.cj.jdbc.MysqlDataSource;
-import com.mysql.cj.xdevapi.Statement;
 
 import modelo.Planta;
 import utilidades.ConexionBD;

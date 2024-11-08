@@ -17,7 +17,7 @@ public class ConexionBD {
 	
 	private static ConexionBD f;
 	
-	private ConexionBD() {
+	public ConexionBD() {
 		Properties prop = new Properties();
 		MysqlDataSource m = new MysqlDataSource();
 		FileInputStream fis;
