@@ -52,14 +52,64 @@ public class PersonaDAO {
 	}
 	
 	
-	public void nuevoUsuarioPersonal(Long id, String contraseña, String email) {
+	public boolean nuevoUsuarioPersonal(Long id, String nombre, String email) {
+		 String sql = "INSERT INTO personas (nombre, email, id) VALUES (?, ?, ?)";
+
+			try {
+				if (this.con == null || this.con.isClosed())
+					this.con = ConexionBD.getInstance().getConnection();
+	            ps = con.prepareStatement(sql);
+	            ps.setString(1,nombre);
+	            ps.setString(2, email);
+	            ps.setLong(3, id);
+	           ps.executeUpdate();
+
+	            
+	            ps.close();
+	            ConexionBD.cerrarConexion();
+	            return true;
+
+	        } catch (SQLException e) {
+	            System.err.println("Ha ocurrido un error al registrar usuario " + e.getMessage());
+	            return false;
+	        }
+	        
+	    }
 	
 	
 	
 	
 	
+
+	public  boolean existeEmail(String email) {
+		boolean existe = false;
 	
-}
+		try {
+			if( this.con ==null ||this.con.isClosed()) 
+				   this.con=ConexionBD.getInstance().getConnection();
+		
+	    String consulta = "SELECT COUNT(*) FROM personas WHERE email = ?";
+	    
+
+	   
+	    	 ps = con.prepareStatement(consulta);
+	        ps.setString(1, email);
+	        rs = ps.executeQuery();
+	        
+	            if (rs.next() && rs.getInt(1) > 0) {
+	                existe = true;
+	                
+	            }
+	            ps.close();
+	            rs.close();
+	            ConexionBD.cerrarConexion();
+
+	    } catch (SQLException e) {
+	        System.err.println("Error al consultar si el código ya existe: " + e.getMessage());
+	    }
+
+	    return existe;
+	}
 	
 	
 	 public List<Persona> findAll(){
@@ -165,4 +215,33 @@ public class PersonaDAO {
 	
 	
 	
-}}
+}
+    public long generarIdPersona() {
+			long id = 0;
+			 try {
+					if( this.con ==null ||this.con.isClosed()) 
+						   this.con=ConexionBD.getInstance().getConnection();
+				
+		    
+		    String sql = "SELECT COALESCE(MAX(id), 0) + 1 AS nuevo_id FROM personas";
+		    
+		     ps = con.prepareStatement(sql);
+		      rs = ps.executeQuery();
+		        
+		       
+		        if (rs.next()) {
+		            id = rs.getLong("nuevo_id");
+		        }
+		    } catch (SQLException e) {
+		        System.err.println("Error al generar un nuevo ID: " + e.getMessage());
+		        e.printStackTrace();
+		  
+		    }
+		    return id;
+		}
+
+
+}
+
+
+

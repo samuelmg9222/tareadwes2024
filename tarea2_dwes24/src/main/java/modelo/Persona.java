@@ -55,25 +55,7 @@ public class Persona {
     }
 
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(credenciales, email, id, nombre);
-	}
-
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Persona other = (Persona) obj;
-		return Objects.equals(credenciales, other.credenciales) && Objects.equals(email, other.email)
-				&& Objects.equals(id, other.id) && Objects.equals(nombre, other.nombre);
-	}
-
+	
 
 	@Override
 	public String toString() {

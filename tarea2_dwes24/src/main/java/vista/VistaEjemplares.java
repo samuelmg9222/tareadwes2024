@@ -41,214 +41,196 @@ public class VistaEjemplares {
 		String opcion = "";
 		int opcionInt = -1;
 		do {
-			System.out.println("\n\tSeleccione una opción:\n");
-			System.out.println("\t1. Registrar ejemplar.\n");
-			System.out.println("\t2. Filtrar ejemplares por tipo de planta .\n");
-			System.out.println("\t3.  Ver mensajes para ejemplar .\n");
-			System.out.println("\t4.  Crear Mensaje.\n");
-			System.out.println("\t5.  Filtrar mensajes.\n");
-			System.out.println("\t99.  Volver al menú Principal\n");
-	
-			opcion = in.next().trim();
-			if (!opcion.matches("\\d+")) { 
-	            System.out.println("Entrada no válida. Por favor, introduzca solo un número sin espacios.");
-	            continue;  
-	        }
-			try {
+		    System.out.println("\n\tSeleccione una opción:\n");
+		    System.out.println("\t1. Registrar ejemplar.\n");
+		    System.out.println("\t2. Filtrar ejemplares por tipo de planta .\n");
+		    System.out.println("\t3. Ver mensajes para ejemplar .\n");
+		    System.out.println("\t4. Crear Mensaje.\n");
+		    System.out.println("\t5. Filtrar mensajes.\n");
+		    System.out.println("\t99. Volver al menú Principal\n");
 
-				opcionInt = Integer.parseInt(opcion.trim());
+		    opcion = in.nextLine().trim();
+		    if (!opcion.matches("\\d+")) { 
+		        System.out.println("Entrada no válida. Por favor, introduzca solo un número sin espacios.");
+		        continue;  
+		    }
+		    try {
+		        opcionInt = Integer.parseInt(opcion.trim());
+		    } catch (NumberFormatException e) {
+		        opcionInt = -1;
+		    }
 
-			} catch (NumberFormatException e) {
+		    if (opcionInt == 99) {
+		        System.out.println("Volviendo...");
+		    } else if (opcionInt < 1 || opcionInt > 5) {
+		        System.out.println("Opción incorrecta.");
+		        continue;
+		    }
 
-				opcionInt = -1;
-			}
+		    switch (opcionInt) {
+		    case 1:
+		    	
+		        List<Planta> plantas3 = new ArrayList<Planta>();
+		        if (Controlador.getServicios().getServiciosPlanta().findAll() != null
+		                && !Controlador.getServicios().getServiciosPlanta().findAll().isEmpty()) {
+		            plantas3 = Controlador.getServicios().getServiciosPlanta().findAll();
 
-			if (opcionInt == 99) {
-				System.out.println("Volviendo...");
+		            System.out.println("   " + Utils.obtenerEncabezado());
+		            int i = 1;
 
-			} else if (opcionInt < 1 || opcionInt > 5) {
-				System.out.println("Opción incorrecta.");
-				continue;
-			}
+		            for (Planta pl : plantas3) {
+		                System.out.println(i + ":" +pl.getCodigo()+"   "+ pl.getNombrecomun() + "   " + pl.getNombrecientifico());
+		                i++;
+		            }
+		        } else {
+		            System.out.println("No se ha podido mostrar el listado o la lista está vacía.");
+		            break;
+		        }
+		        int ind = 0;
+		        
+		            try {
+		                System.out.println("Dame el numero (indice) de la planta que desea crear ejemplar: 9999 para salir");
+		                String indice = in.nextLine().trim(); 
 
-			switch (opcionInt) {
-			case 1:
-				List<Planta> plantas3 = new ArrayList<Planta>();
-				if (Controlador.getServicios().getServiciosPlanta().findAll() != null
-						&& !Controlador.getServicios().getServiciosPlanta().findAll().isEmpty()) {
-					plantas3 = Controlador.getServicios().getServiciosPlanta().findAll();
+		                ind = Integer.parseInt(indice);
+		                
+		                if(ind == 9999) {
+		                    break;
+		                }
+		                Long idEj;
 
-					System.out.println("   " + Utils.obtenerEncabezado());
-					int i = 1;
+		                LocalDateTime fechaH = LocalDateTime.now();
 
-					for (Planta pl : plantas3) {
+		                if (Controlador.getServicios().getServiciosPlanta().existeCodigoPlanta(plantas3.get(ind - 1).getCodigo())) {
 
-						System.out.println(i + ": " + pl.getNombrecomun() + "\t" + pl.getNombrecientifico());
-						i++;
-					}
-				} else {
-					System.out.println("No se ha podido mostrar el listado o la lista está vacía.");
-					break;
-				}
-				int ind = 0;
-				do {
-				try {
-					System.out.println("Dame el numero (indice) de la planta que desea modificar: 9999 para salir");
-					String indice = in.next().trim();
+		                    if (Controlador.getServicios().getServiciosEjemplar().generarIdEjemplar() == 0) {
+		                        System.out.println("Error al generar idEjemplar. No se ha podido completar el proceso");
+		                        break;
+		                    } else {
+		                        idEj = Controlador.getServicios().getServiciosEjemplar().generarIdEjemplar();
+		                        if (Controlador.getServicios().getServiciosEjemplar().generarNombreEjemplar(plantas3.get(ind - 1).getCodigo()).isBlank()) {
+		                            System.out.println("Error al generar nombre del ejemplar. No se ha podido completar el proceso");
+		                        } else {
+		                            Ejemplar ej = new Ejemplar(idEj, 
+		                                    (idEj + "_" + Controlador.getServicios().getServiciosEjemplar().generarNombreEjemplar(plantas3.get(ind - 1).getCodigo())));
 
-					 ind = Integer.parseInt(indice);
-					 
-					 if(ind==9999) {
-						 break;
-					 }
-					Long idEj;
+		                            if (Controlador.getServicios().getServiciosEjemplar().InsertarEjemplar(ej, plantas3.get(ind - 1).getCodigo()) == 0) {
+		                                System.out.println("No se ha podido insertar el ejemplar");
+		                                break;
+		                            } else {
+		                                if (Controlador.getServicios().getServiciosMensaje().generarIdMensaje() == 0) {
+		                                    System.out.println("No se ha podido generar el idmensaje");
+		                                } else {
+		                                    Mensaje ms = new Mensaje(Controlador.getServicios().getServiciosMensaje().generarIdMensaje(),
+		                                            fechaH, Utils.generarmensaje(idpersona), idEj, idpersona);
+		                                    if (Controlador.getServicios().getServiciosMensaje().InsertarMensaje(ms, idpersona) == 0) {
+		                                        System.out.println("No se ha podido insertar el mensaje");
+		                                    } else {
+		                                        System.out.println("Se ha registrado el ejemplar correctamente. También se ha registrado un mensaje: "
+		                                                + ms.getMensaje());
+		                                    }
+		                                }
+		                            }
+		                        }
+		                    }
+		                } else {
+		                    System.out.println("No existe el código introducido");
+		                }
+		            } catch (Exception e) {
+		                System.out.println("No se ha podido completar el proceso. El índice tiene que ser un número de los mostrados");
+		            }
 
-					LocalDateTime fechaH = LocalDateTime.now();
 
-					if (Controlador.getServicios().getServiciosPlanta()
-							.existeCodigoPlanta(plantas3.get(ind - 1).getCodigo())) {
+		        break;
 
-						if (Controlador.getServicios().getServiciosEjemplar().generarIdEjemplar() == 0) {
-							System.out.println("Error al generar idEjemplar. No se ha podido completar el proceso");
-							break;
-						} else {
-							idEj = Controlador.getServicios().getServiciosEjemplar().generarIdEjemplar();
-							if (Controlador.getServicios().getServiciosEjemplar()
-									.generarNombreEjemplar(plantas3.get(ind - 1).getCodigo()).isBlank()) {
-								System.out.println(
-										"Error al generar nombre del ejemplar. No se ha podido completar el proceso");
-							} else {
-								Ejemplar ej = new Ejemplar(idEj,
-										(idEj + "_" + Controlador.getServicios().getServiciosEjemplar()
-												.generarNombreEjemplar(plantas3.get(ind - 1).getCodigo())));
+		    case 2:
+		        ArrayList<String> codigos = new ArrayList<>();
+		        List<Planta> plantas2 = new ArrayList<Planta>();
 
-								if (Controlador.getServicios().getServiciosEjemplar().InsertarEjemplar(ej,
-										plantas3.get(ind - 1).getCodigo()) == 0) {
-									System.out.println("No se ha podido insertar el ejemplar");
-									break;
-								} else {
-									if (Controlador.getServicios().getServiciosMensaje().generarIdMensaje() == 0) {
-										System.out.println("No se ha podido generar el idmensaje");
-										
-									} else {
-										Mensaje ms = new Mensaje(
-												Controlador.getServicios().getServiciosMensaje().generarIdMensaje(),
-												fechaH, Utils.generarmensaje(idpersona), idEj, idpersona);
-										if (Controlador.getServicios().getServiciosMensaje().InsertarMensaje(ms,
-												idpersona) == 0) {
-											System.out.println("No se ha podido insertar el mensaje");
-										} else {
-											System.out.println(
-													"Se ha registrado el ejemplar correctamente.  Tambien se ha registrado un mensaje: "
-															+ ms.getMensaje());
-										}
-									}
-								}
-							}
-						}
-					} else
-						System.out.println("No existe el codigo introducido");
-				} catch (Exception e) {
-					System.out.println(
-							"No se ha podido completar el proceso. El indice tiene que ser un numero de los mostrados");
-				}
-				
-				}while(ind!=9999);
-				break;
+		        if (Controlador.getServicios().getServiciosPlanta().findAll() != null
+		                && !Controlador.getServicios().getServiciosPlanta().findAll().isEmpty()) {
+		            plantas2 = Controlador.getServicios().getServiciosPlanta().findAll();
 
-			
-			
-			
-			case 2:
-				
-				ArrayList<String> codigos = new ArrayList<>();
-				
-				List<Planta> plantas2 = new ArrayList<Planta>();
-				
-				if (Controlador.getServicios().getServiciosPlanta().findAll() != null
-						&& !Controlador.getServicios().getServiciosPlanta().findAll().isEmpty()) {
-					plantas2 = Controlador.getServicios().getServiciosPlanta().findAll();
+		            System.out.println("   " + Utils.obtenerEncabezado());
+		            int i = 1;
 
-					System.out.println("   " + Utils.obtenerEncabezado());
-					int i = 1;
+		            for (Planta pl : plantas2) {
+		                System.out.println(i + ": " + pl);
+		                i++;
+		            }
+		        } else {
+		            System.out.println("No se ha podido mostrar el listado o la lista está vacía.");
+		            break;
+		        }
+		        String indice;
+		        int indicePlanta;
+		        do {
+		            do {
+		                try {
+		                    System.out.println("Dame el numero (índice) de la planta sobre el que quieres filtrar ejemplares (9999 para salir)");
+		                    indicePlanta = -1;
+		                    indice = in.nextLine().trim(); 
+		                    indicePlanta = Integer.parseInt(indice);
+		                    if (!(indicePlanta > 0 && indicePlanta <= plantas2.size() || indicePlanta == 9999)) {
+		                        System.out.println("Por favor, elige un número válido dentro del rango.");
+		                        continue;
+		                    }
 
-					for (Planta pl : plantas2) {
+		                    if (indice.equals("9999")) {
+		                        break;
+		                    }
 
-						System.out.println(i + ": " + pl);
-						i++;
-					}
-				} else {
-					System.out.println("No se ha podido mostrar el listado o la lista está vacía.");
-					break;
-				}
-				
+		                    if (Controlador.getServicios().getServiciosEjemplar().procesarCodigo(plantas2.get(indicePlanta - 1).getCodigo(), codigos)) {
 
-				int indicePlanta;
-do {
-				do {
-					try {
-						System.out.println(
-								"Dame el numero (índice) de la planta sobre el que quieres crear una planta (9999 para salir)");
-						indicePlanta = -1;
-						String indice = in.next().trim();
-						indicePlanta = Integer.parseInt(indice);
-						if (!(indicePlanta > 0 && indicePlanta <= plantas2.size() || indicePlanta == 9999)) {
+		                        if (Controlador.getServicios().getServiciosPlanta().existeCodigoPlanta(plantas2.get(indicePlanta - 1).getCodigo())) {
 
-							System.out.println("Por favor, elige un número válido dentro del rango.");
-							continue;
-						}
+		                            System.out.println("Código válido, ¿desea ingresar otro código? (S/N)");
 
-						if (indice.equals("9999")) {
-							break;
-						}
+		                            String opc;
+		                            do {
+		                                opc = in.nextLine().toUpperCase().trim(); 
+		                                if (!opc.equals("S") && !opc.equals("N")) {
+		                                    System.out.println("Introduce una opción válida; (S/N)");
+		                                }
+		                            } while (!opc.equals("S") && !opc.equals("N"));
 
-						if (Controlador.getServicios().getServiciosEjemplar().procesarCodigo(plantas2.get(indicePlanta - 1).getCodigo(), codigos)) {
-
-							if (Controlador.getServicios().getServiciosPlanta().existeCodigoPlanta(plantas2.get(indicePlanta - 1).getCodigo())) {
-
-								System.out.println("Código válido, ¿desea ingresar otro código? (S/N)");
-
-								String opc;
-								do {
-									opc = in.next().toUpperCase().trim();
-									if (!opc.equals("S") && !opc.equals("N")) {
-										System.out.println("Introduce una opción válida; (S/N)");
-									}
-								} while (!opc.equals("S") && !opc.equals("N"));
-
-								if (opc.equals("N")) {
-									break;
-								}
-							}else {
-								System.out.println("Codigo no valido");
-							}
-						}else {
-							System.out.println("Se ha producido un error al procesar el codigo");
-						}
-					} catch (NumberFormatException e) {
-						System.out.println("Introduce un número válido.");
-						continue;
-					} catch (Exception e) {
-						System.out.println(e.getMessage());
-					}
-				} while (true);
-
-				if (!codigos.isEmpty()) {
-					for (String c : codigos) {
-						List<Ejemplar> ejemplares = Controlador.getServicios().getServiciosEjemplar().obtenerEjemplaresPorCodigo(c);
-						if (ejemplares.isEmpty()) {
-							System.out.println("\nLa planta con código " + c + " se encuentra sin ejemplares");
-						} else {
-							System.out.println("\nEjemplares con código de planta " + c + ":");
-							for (Ejemplar ejmp : ejemplares) {
-								System.out.println(ejmp);
-							}
-						}
-					}
-				}
-				 in.nextLine();
-}while(indicePlanta==9999);
-				break;
+		                            if (opc.equals("N")) {
+		                                break;
+		                            }
+		                        } else {
+		                            System.out.println("Código no válido");
+		                        }
+		                    } else {
+		                        System.out.println("Se ha producido un error al procesar el código");
+		                    }
+		                } catch (NumberFormatException e) {
+		                    System.out.println("Introduce un número válido.");
+		                    continue;
+		                } catch (Exception e) {
+		                    System.out.println(e.getMessage());
+		                }
+		            } while (true);
+		            if (indice.equals("9999")) {
+                        break;
+                    }
+		            if (!codigos.isEmpty()) {
+		                for (String c : codigos) {
+		                    List<Ejemplar> ejemplares = Controlador.getServicios().getServiciosEjemplar().obtenerEjemplaresPorCodigo(c);
+		                    if (ejemplares.isEmpty()) {
+		                        System.out.println("\nLa planta con código " + c + " se encuentra sin ejemplares");
+		                    } else {
+		                        System.out.println("\nEjemplares con código de planta " + c + ":");
+		                        for (Ejemplar ejmp : ejemplares) {
+		                            System.out.println(ejmp);
+		                        }
+		                    }
+		                }
+		            }
+		            
+		        } while(indicePlanta == 9999);
+		        break;
+		    
+		
 
 			case 3:
 				Long idEjem = 0L;
@@ -262,13 +244,15 @@ do {
 
 					ejemplares = Controlador.getServicios().getServiciosEjemplar().findAll();
 					for (Ejemplar c : ejemplares) {
-						System.out.println(j + ".  id: " + c.getId() + "  nombre: " + c.getNombre());
+						System.out.println(j + ".   nombre: " + c.getNombre());
 						j++;
 					}
-do {
+
 					System.out.println("\nDame un indice (NUMERO DE LISTA) para ver mensajes asociados a ese ejemplar: (9999 para salir)");
-					indc = in.next().trim();
-					 
+					indc = in.nextLine().trim();
+					 if(indc.equals("9999")) {
+						 break;
+					 }
 
 					try {
 						opc = Integer.parseInt(indc);
@@ -303,11 +287,11 @@ do {
 					} else
 						System.out.println("Codigo no valido");
 				
-				}while(opc!=9999);
+				
 				}else {System.out.println("No se han encontrado ejemplares");}
 				
 				
-				 in.nextLine();
+				 
 				break;
 
 			case 4:
@@ -324,10 +308,10 @@ do {
 						System.out.println(k + ".  id: " + c.getId() + "  nombre: " + c.getNombre());
 						k++;
 					}
-do {
+
 					System.out.println("\nDame un indice (NUMERO DE LISTA) para ver mensajes asociados a ese ejemplar: (9999 para salir)");
 				;
-				codigoEjemplar = in.next().trim();
+				codigoEjemplar = in.nextLine().trim();
 if(codigoEjemplar.equals("9999")) {
 	break;
 }
@@ -359,12 +343,12 @@ if(codigoEjemplar.equals("9999")) {
 					e.getMessage();
 					continue;
 				}
-}while(!codigoEjemplar.equals("9999"));
+
 
 					}else {System.out.println("No se han encontrado ejemplares");}
 				
 				
-				 in.nextLine();
+				
 				break;
 
 			case 5:
@@ -375,7 +359,7 @@ if(codigoEjemplar.equals("9999")) {
 					System.out.println("\t2.  Filtrar por tipoplanta.\n");
 					System.out.println("\t3.  Filtrar por Fechas.\n");
 					System.out.println("\t9999.  Volver.\n");
-					opcion = in.next().trim();
+					opcion = in.nextLine().trim();
 					if (!opcion.matches("\\d+")) {  
 		                System.out.println("Entrada no válida. Por favor, introduzca solo un número sin espacios.");
 		                continue;
@@ -420,9 +404,9 @@ if(codigoEjemplar.equals("9999")) {
 								break;
 						 }
 						System.out.println("Dame el numero (indice) de usuario sobre el que quiere ver mensajes:");
-						String indice = in.next().trim();
+						String indic = in.nextLine().trim();
 						try {
-							int indP = Integer.parseInt(indice);
+							int indP = Integer.parseInt(indic);
 
 							if (!Controlador.getServicios().getServiciosPersona()
 									.existeUsuario(users.get(indP).getId().toString())) {
@@ -446,7 +430,7 @@ if(codigoEjemplar.equals("9999")) {
 							System.out.println("Solo se pueden elegir dentro del indice");
 
 						}
-						 in.nextLine();
+						
 						break;
 						
 						
@@ -475,7 +459,7 @@ if(codigoEjemplar.equals("9999")) {
 						}
 						
 						System.out.println("Dame el numero (indice) de la planta sobre el que quieres ver mensajes");
-						String index = in.next().trim();
+						String index = in.nextLine().trim();
 						try {
 							int indce = Integer.parseInt(index);
 
@@ -515,17 +499,17 @@ if(codigoEjemplar.equals("9999")) {
 						LocalDate fechaActual = LocalDate.now();
 						String fechaInicioStr="",fechaFinStr="";
 						DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-do {
+
 						try {
 							System.out.println("Introduce la fecha de inicio (formato yyyy-MM-dd)  999 para salir:");
-							 fechaInicioStr = in.next().trim();
+							 fechaInicioStr = in.nextLine().trim();
 							if (fechaInicioStr.equals("999")){
 								break;
 							}
 							fechaInicio = LocalDate.parse(fechaInicioStr, formatter);
 
 							System.out.println("Introduce la fecha de fin (formato yyyy-MM-dd): 999 para salir");
-							 fechaFinStr = in.next().trim();
+							 fechaFinStr = in.nextLine().trim();
 							if (fechaInicioStr.equals("999")){
 								break;
 							}
@@ -556,15 +540,15 @@ do {
 							System.out.println("Formato de fecha no válido. Debes de usar el formato yyyy-MM-dd.");
 
 						}
-}while(!fechaInicioStr.equals("999")||!fechaFinStr.equals("999"));
-in.nextLine();
+
+
 						break;
 
 					default:
 						System.out.println("Opción incorrecta.");
 						break;
 					}
-in.reset();
+
 				} while (opcionInt != 9999);
 				break;
 
@@ -575,7 +559,7 @@ in.reset();
 				break;
 
 			}
-			 in.nextLine();
+			 
 		} while (opcionInt != 99);
 	}
 

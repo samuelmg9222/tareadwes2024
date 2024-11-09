@@ -11,6 +11,7 @@ public class ServicioPlanta {
 	private ConexionBD con;
 	private PlantaDAO plantaDAO;
 
+	
 	public ServicioPlanta() {
 		con = ConexionBD.getInstance();
 		plantaDAO = (PlantaDAO) con.getPlantaDAO();

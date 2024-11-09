@@ -53,6 +53,7 @@ public class  CredencialesDAO {
 	 
 	    public Credenciales findByUsuario(String user) {
 	        Credenciales credenciales = new Credenciales();
+	        credenciales.setId(-1L);
 	        String sql = "SELECT * FROM credenciales WHERE usuario = ?";
 
 	        try {
@@ -63,15 +64,18 @@ public class  CredencialesDAO {
 	            rs = ps.executeQuery();
 
 	            if (rs.next()) {
-	                Long id = rs.getLong("id");
-	                String usuario = rs.getString("usuario");
-	                String password = rs.getString("password");
-	                Long idPersona = rs.getLong("idpersona");
-	                credenciales.setId(id);
-	                credenciales.setUsuario(usuario);
-	                credenciales.setPassword(password);
-	                credenciales.setIdpersona(idPersona);
-	            }
+	            	   credenciales = new Credenciales();
+	                   Long id = rs.getLong("id");
+	                   String usuario = rs.getString("usuario");
+	                   String password = rs.getString("password");
+	                   Long idPersona = rs.getLong("idpersona");
+
+	                   credenciales.setId(id);
+	                   credenciales.setUsuario(usuario);
+	                   credenciales.setPassword(password);
+	                   credenciales.setIdpersona(idPersona);
+	               }
+	            
 	            ps.close();
 	            rs.close();
 	            ConexionBD.cerrarConexion();
@@ -84,26 +88,58 @@ public class  CredencialesDAO {
 	    
 
 	    public boolean insertarcredenciales(Credenciales credenciales) {
-	        String sql = "INSERT INTO credenciales (usuario, password, idpersona) VALUES (?, ?, ?)";
+	        String sql = "INSERT INTO credenciales (id,usuario, password, idpersona) VALUES (?,?,?,?)";
 
 	        try {
+	        	if (this.con == null || this.con.isClosed())
+					this.con = ConexionBD.getInstance().getConnection();
 	            ps = con.prepareStatement(sql);
-	            ps.setString(1, credenciales.getUsuario());
-	            ps.setString(2, credenciales.getPassword());
-	            ps.setLong(3, credenciales.getIdpersona());
+	            ps.setLong(1, credenciales.getId());
+	            ps.setString(2, credenciales.getUsuario());
+	            ps.setString(3, credenciales.getPassword());
+	            ps.setLong(4, credenciales.getIdpersona());
 	           ps.executeUpdate();
-
+ps.close();
+ConexionBD.cerrarConexion();
 	            return true;
 
 	        } catch (SQLException e) {
-	            System.err.println("Error al guardar la credencial --> " + e.getMessage());
+	            System.err.println("Se ha producido un error al guardar la credencial " + e.getMessage());
 	            return false;
 	        }
 	        
 	    }
 	        
-	      
-	        
+	
+	    public long generarIdCredenciales() {
+			long id = 0;
+			 try {
+					if( this.con ==null ||this.con.isClosed()) 
+						   this.con=ConexionBD.getInstance().getConnection();
+				
+		    
+		    String sql = "SELECT COALESCE(MAX(id), 0) + 1 AS nuevo_id FROM credenciales";
+		    
+		     ps = con.prepareStatement(sql);
+		      rs = ps.executeQuery();
+		        
+		       
+		        if (rs.next()) {
+		            id = rs.getLong("nuevo_id");
+		        }
+		        rs.close();
+		        ps.close();
+		        ConexionBD.cerrarConexion();
+		    } catch (SQLException e) {
+		        System.err.println("Error al generar un nuevo ID: " + e.getMessage());
+		        e.printStackTrace();
+		  
+		    }
+		    return id;
+		}
+
+
+}   
 
 	    
 	    
@@ -111,4 +147,3 @@ public class  CredencialesDAO {
 	    
 	    
 	    
-}

@@ -1,8 +1,8 @@
 import java.sql.Connection;
 
-import Fachada.Fachada;
+
 import utilidades.ConexionBD;
-import vista.MenuPrincipal;
+import vista.VistaInicial;
 
 
 public class Vivero {
@@ -15,10 +15,10 @@ public class Vivero {
 
 	            System.exit(1);
 	        }
-		MenuPrincipal menu=new MenuPrincipal();
+	        VistaInicial menu=new VistaInicial();
 		menu.mostrarMenuPrincipal();
 
 
-	}
+	} 
 
 }

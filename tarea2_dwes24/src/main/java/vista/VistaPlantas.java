@@ -17,7 +17,6 @@ public class VistaPlantas {
 
 	public VistaPlantas(Connection con) {
 		this.con = con;
-
 	}
 
 	public static VistaPlantas getPortalvistaPlantas() {
@@ -37,25 +36,20 @@ public class VistaPlantas {
 			System.out.println("\t2.  Ver plantas (CU1).\n");
 			System.out.println("\t3.  Modificar planta (CU4_B).\n");
 			System.out.println("\t99.  Volver al menú Principal\n");
-			opcion = in.next().trim();
+			opcion = in.nextLine().trim();  
 			if (!opcion.matches("\\d+")) {
 				System.out.println("Entrada no válida. Por favor, introduzca solo un número sin espacios.");
 				continue;
 			}
 			try {
-
 				opcionInt = Integer.parseInt(opcion.trim());
 			} catch (NumberFormatException e) {
-
 				opcionInt = -1;
 			}
 
 			if (opcionInt == 99) {
 				System.out.println("Volviendo...");
-
-			} else if (opcionInt < 1 || opcionInt > 3) {
-				System.out.println("Opción incorrecta.");
-				continue;
+				break;
 			}
 
 			switch (opcionInt) {
@@ -64,45 +58,45 @@ public class VistaPlantas {
 				String nombreComun;
 				String codigo;
 				String nombreCientifico;
-do {
-				System.out.println("Dame código de una nueva planta (FORMATO DE 4 LETRAS SIN TILDES [AAAA]) Introduce 9999 para salir:");
-				codigo = in.next().trim();
-if (!codigo.equals("9999")){
-	
-}
-				System.out.println("Dame nombre común de la planta:");
-				nombreComun = in.next().trim().toUpperCase();
-
-				System.out.println("Dame nombre científico de la planta:");
-				nombreCientifico = in.next().trim().toUpperCase();
-
-				Planta p = new Planta(codigo, nombreComun, nombreCientifico);
-				int operacion = Controlador.getServicios().getServiciosPlanta().verificarPlanta(p);
-				if (operacion == 1) {
-					try {
-
-						if (Controlador.getServicios().getServiciosPlanta().InsertarPlanta(p) > 0)
-							System.out.println(nombreComun + " (" + nombreCientifico + ") ingresada con éxito: código "
-									+ codigo + ".");
-					} catch (Exception e) {
-						System.out.println("Se ha producido una excepción: " + e.getMessage());
+				do {
+					System.out.println("Dame código de una nueva planta (FORMATO DE 4 LETRAS SIN TILDES [AAAA]) Introduce 9999 para salir:");
+					codigo = in.nextLine().trim().toUpperCase();
+					if (codigo.equals("9999")) {
+						break;
 					}
-				}
-				if (operacion == -1)
-					System.out.println("Formato de codigo no valido.Solo pueden ser 4 letrassin tildes ni ñ");
-				if (operacion == -2)
-					System.out.println("No se ha completado la operacion. Ese codigo de planta ya existe para otra planta");
-				if (operacion == -3)
-					System.out.println("Nombre comun no valido. Debe ser de 3 a 99 letras incluyendo espacios y sin tildes ni ñ");
-				if (operacion == -4)
-					System.out.println("Nombre cientifico no valido. Debe ser de 3 a 99 letras incluyendo espacios y sin tildes ni ñ");
-				
-}while(opcion.equals("9999"));
+					System.out.println("Dame nombre común de la planta:");
+					nombreComun = in.nextLine().trim().toUpperCase();  
+
+					System.out.println("Dame nombre científico de la planta:");
+					nombreCientifico = in.nextLine().trim().toUpperCase(); 
+
+					Planta p = new Planta(codigo, nombreComun, nombreCientifico);
+					int operacion = Controlador.getServicios().getServiciosPlanta().verificarPlanta(p);
+					if (operacion == 1) {
+						try {
+							if (Controlador.getServicios().getServiciosPlanta().InsertarPlanta(p) > 0)
+								System.out.println(nombreComun + " (" + nombreCientifico + ") ingresada con éxito: código "
+										+ codigo + ".");
+						} catch (Exception e) {
+							System.out.println("Se ha producido una excepción: " + e.getMessage());
+						}
+					}
+					if (operacion == -1)
+						System.out.println("Formato de codigo no valido. Solo pueden ser 4 letras sin tildes ni ñ");
+					if (operacion == -2)
+						System.out.println("No se ha completado la operacion. Ese codigo de planta ya existe para otra planta");
+					if (operacion == -3)
+						System.out.println("Nombre comun no valido. Debe ser de 3 a 99 letras incluyendo espacios y sin tildes ni ñ");
+					if (operacion == -4)
+						System.out.println("Nombre cientifico no valido. Debe ser de 3 a 99 letras incluyendo espacios y sin tildes ni ñ");
+					if (operacion == 1) {
+						System.out.println("Planta registrada con exito");
+					}
+				} while (codigo.equals("9999"));
 				break;
 
 			case 2:
 				listarPlantas();
-
 				break;
 
 			case 3:
@@ -120,7 +114,6 @@ if (!codigo.equals("9999")){
 					int i = 1;
 
 					for (Planta pl : plantas2) {
-
 						System.out.println(i + ": " + pl.getNombrecomun() + "\t" + pl.getNombrecientifico());
 						i++;
 					}
@@ -128,23 +121,20 @@ if (!codigo.equals("9999")){
 					System.out.println("No se ha podido mostrar el listado o la lista está vacía.");
 					break;
 				}
-				do {
+				
 					try {
-						System.out.println(
-								"Dame el número (índice) de la planta que desea modificar: (Introduce 9999 si deea salir");
-						String indice = in.next().trim();
+						System.out.println("Dame el número (índice) de la planta que desea modificar: (Introduce 9999 si desea salir)");
+						String indice = in.nextLine().trim();  
 
 						ind = Integer.parseInt(indice);
 						if (ind == 9999) {
 							break;
 						}
-						System.out.println(
-								"Dame nombre común que desea poner a la planta. Si no desea modificarlo, introduce su nombre como está:");
-						nombreComun = in.next().trim().toUpperCase();
+						System.out.println("Dame nombre común que desea poner a la planta. Si no desea modificarlo, introduce su nombre como está:");
+						nombreComun = in.nextLine().trim().toUpperCase();  // Cambio a nextLine()
 
-						System.out.println(
-								"Dame nombre científico de la planta. Si no desea modificarlo, introduce su nombre como está:");
-						nombreCientifico = in.next().trim().toUpperCase();
+						System.out.println("Dame nombre científico de la planta. Si no desea modificarlo, introduce su nombre como está:");
+						nombreCientifico = in.nextLine().trim().toUpperCase();  // Cambio a nextLine()
 
 						Planta pl = new Planta(plantas2.get(ind - 1).getCodigo(), nombreComun, nombreCientifico);
 
@@ -153,7 +143,6 @@ if (!codigo.equals("9999")){
 
 						switch (resultado) {
 						case 1:
-
 							Controlador.getServicios().getServiciosPlanta().modificarPlanta(pl);
 							System.out.println("Has modificado la planta de código [" + pl.getCodigo() + "] con éxito");
 							break;
@@ -161,16 +150,13 @@ if (!codigo.equals("9999")){
 							System.out.println("Número fuera de rango del índice");
 							break;
 						case -2:
-							System.out.println(
-									"Nombre común no válido. Debe ser de 3 a 99 letras incluyendo espacios y sin tildes ni ñ");
+							System.out.println("Nombre común no válido. Debe ser de 3 a 99 letras incluyendo espacios y sin tildes ni ñ");
 							break;
 						case -3:
-							System.out.println(
-									"Nombre científico no válido. Debe ser de 3 a 99 letras incluyendo espacios y sin tildes ni ñ");
+							System.out.println("Nombre científico no válido. Debe ser de 3 a 99 letras incluyendo espacios y sin tildes ni ñ");
 							break;
 						case -4:
-							System.out.println(
-									"No se ha podido modificar nada ya que los datos son los mismos que los ya existentes");
+							System.out.println("No se ha podido modificar nada ya que los datos son los mismos que los ya existentes");
 							break;
 						default:
 							System.out.println("Error desconocido al intentar modificar la planta");
@@ -182,17 +168,16 @@ if (!codigo.equals("9999")){
 					} catch (Exception e) {
 						System.out.println("No se ha podido realizar la modificación.");
 					}
-				} while (ind != 9999);
+				
 				break;
 
 			case 99:
 				break;
 			default:
-				System.out.println("Opcion no valida.");
+				System.out.println("Opción no válida.");
 				break;
 			}
 		} while (opcionInt != 99);
-
 	}
 
 	public List<Planta> listarPlantas() {
