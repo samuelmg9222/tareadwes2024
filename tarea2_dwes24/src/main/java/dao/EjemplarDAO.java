@@ -83,6 +83,7 @@ int ins=0;
 	            if (rs.next() && rs.getInt(1) > 0) {
 	                existe = true;
 	                ps.close();
+	                
 		            ConexionBD.cerrarConexion();
 	            }
 	        

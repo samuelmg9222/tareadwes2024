@@ -114,7 +114,7 @@ public class VistaPlantas {
 					int i = 1;
 
 					for (Planta pl : plantas2) {
-						System.out.println(i + ": " + pl.getNombrecomun() + "\t" + pl.getNombrecientifico());
+						System.out.println(i + ": " +pl.getCodigo()+"\t"+ pl.getNombrecomun() + "\t" + pl.getNombrecientifico());
 						i++;
 					}
 				} else {
@@ -131,10 +131,10 @@ public class VistaPlantas {
 							break;
 						}
 						System.out.println("Dame nombre común que desea poner a la planta. Si no desea modificarlo, introduce su nombre como está:");
-						nombreComun = in.nextLine().trim().toUpperCase();  // Cambio a nextLine()
+						nombreComun = in.nextLine().trim().toUpperCase();
 
 						System.out.println("Dame nombre científico de la planta. Si no desea modificarlo, introduce su nombre como está:");
-						nombreCientifico = in.nextLine().trim().toUpperCase();  // Cambio a nextLine()
+						nombreCientifico = in.nextLine().trim().toUpperCase(); 
 
 						Planta pl = new Planta(plantas2.get(ind - 1).getCodigo(), nombreComun, nombreCientifico);
 

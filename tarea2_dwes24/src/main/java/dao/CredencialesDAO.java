@@ -42,6 +42,9 @@ public class  CredencialesDAO {
 
 	                Credenciales.add(credenciales);
 	            }
+	            ps.close();
+	            rs.close();
+	            ConexionBD.cerrarConexion();
 
 	        } catch (SQLException e) {
 	            System.err.println("Error haciendo el listado de credenciales --> " + e.getMessage());

@@ -309,7 +309,7 @@ public class VistaEjemplares {
 						k++;
 					}
 
-					System.out.println("\nDame un indice (NUMERO DE LISTA) para ver mensajes asociados a ese ejemplar: (9999 para salir)");
+					System.out.println("\nDame un indice (NUMERO DE LISTA) para ver crear un mensaje asociado a ese ejemplar: (9999 para salir)");
 				;
 				codigoEjemplar = in.nextLine().trim();
 if(codigoEjemplar.equals("9999")) {
